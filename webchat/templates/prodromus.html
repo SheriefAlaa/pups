@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Prodromus XMPP client</title>
+        <script type="text/javascript" src="/static/lib/jquery-1.4.1.min.js"></script>
+        <script type="text/javascript" src="/static/lib/strophe-1.0.1.min.js"></script>
+        <script type="text/javascript" src="/static/prodromus.js" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" media="screen" href="/static/css/styles.css" />
+
+
+        <script type="text/javascript">
+            Prodromus.UI = {
+
+                initialize: function( el ) {
+                    var pattern = 
+                         '<div id="prodromus-login">'
+                            +'<form name="prodromus-credentials" action="">'
+                                +'<input type="button" id="prodromus-connect" value="{t9n_connect}" />'
+                                +'<label for="prodromus-username">{t9n_your-name}:</label>'
+                                +'<input type="text" id="prodromus-username" value="{sendername}" />'
+                                +'<span id="prodromus-usernameDisplay"></span>'
+                                +'<div class="clear"></div>'
+                            +'</form>'
+                        +'</div>'
+                        +'<div id="prodromus-messaging">'
+                            +'<div id="prodromus-log"></div>'
+                            +'<form id="prodromus-msgform" action="">'
+                                +'<textarea id="prodromus-message" rows="2" cols="52"></textarea>'
+                                +'<input type="button" id="prodromus-sendmessage" value="{t9n_send}" />'
+                                +'<div class="prodromus-clear"></div>'
+                            +'</form>'
+                        +'</div>';
+                    
+                    pattern = pattern.replace( "{sendername}", Prodromus.config.SENDERNAME );
+                    pattern = pattern.replace( "{t9n_your-name}", Prodromus.i18n.t9n( 'your-name' ) );
+                    pattern = pattern.replace( "{t9n_connect}", Prodromus.i18n.t9n( 'connect' ) );
+                    pattern = pattern.replace( "{t9n_send}", Prodromus.i18n.t9n( 'send' ) );
+                        
+                    $(el).html( pattern );
+                },
+                
+                log: function( msg, type ) {
+                    var pattern = 
+                         '<div class="message message{type}">' 
+                            +'<span class="msgText">{message}</span>'
+                            +'<span class="msgPerson">{person}<span class="msgTime">, {time}</span></span>'
+                        +'</div>';
+                    
+                    switch( type ) {
+                        case 'msgIn':
+                            pattern = pattern.replace( "{type}", "In" );
+                            pattern = pattern.replace( "{person}", Prodromus.Util.htmlspecialchars( Prodromus.config.RECEIVERNAME ) );
+                            break;
+                        case 'msgOut':
+                            pattern = pattern.replace( "{type}", "Out" );
+                            pattern = pattern.replace( "{person}", Prodromus.Util.htmlspecialchars( Prodromus.config.SENDERNAME ) );
+                            break;
+                        case 'system':
+                        default:
+                            pattern = pattern.replace( "{type}", "System" );
+                            pattern = pattern.replace( "{person}", "System" );
+                            break;
+                    }
+                    
+                    msg = Prodromus.Util.htmlspecialchars( msg );
+                    msg = Prodromus.Util.text2link( msg );
+                    
+                    pattern = pattern.replace( "{message}", msg );
+                    
+                    pattern = pattern.replace( "{time}", Prodromus.i18n.getFormattedDate() );
+                    $( pattern ).appendTo( $('#prodromus-log') );
+                    
+                    $("#prodromus-log").animate( { scrollTop: $("#prodromus-log").attr("scrollHeight") }, 1000 );
+                }
+
+            }
+
+
+        </script>
+    </head>
+    <body>
+        <div id="prodromus"></div>
+    </body>
+</html>
+
