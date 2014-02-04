@@ -3,20 +3,17 @@ webchat
 
 Basically this is just Prodromus inside a Django project.
 
-Components needed:
+components needed:
 ==================
--Any version of Apache
--Python 2.5 or above
--python-django (1.4+)
--libapache2-mod-wsgi
+Any version of Apache, Python 2.5 or above, python-django (1.4+) and libapache2-mod-wsgi.
 
-How to install
-==============
+how to install:
+===============
 
-1) Clone.
+1) Clone the repo somewhere locally.
  
-2) Add these lines to httpd/apache2.conf:
-=========================================
+2) Add the following to your httpd/apache2.conf:
+```
 Alias /static/ /home/USER/webchat/static/
  
 <Directory /home/USER/webchat/static>
@@ -32,11 +29,13 @@ WSGIPythonPath /home/USER/webchat
    Allow from all
  </Files>
 </Directory>
+```
 
 3) Visit localhost/webchat from your browser.
  
-Note:
+note:
 =====
 1) webchat/webchat/settings.py line 26 (ALLOWED_HOSTS = ['*']) should be
 (ALLOWED_HOSTS = ['www.domainname.org'])
+
 2) On each change in any file apachectl restart is needed (needs virtualenv and mod_wsgi as a daemon).
