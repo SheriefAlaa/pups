@@ -1,0 +1,13 @@
+{% extends "generic_form.html" %}
+{% block title %}Webchat - Login{% endblock title %}
+
+{% block form-tag %}
+
+{% if bad_login %}
+<p> Invalid username or password, retry. </p>
+{% endif %}
+
+<form method="post" action="/login">{% csrf_token %}
+{{ form.as_p}}
+<input type="submit" value="Login">
+{% endblock form-tag %}

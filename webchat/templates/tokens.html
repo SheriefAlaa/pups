@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Webchat - Token Generator{% endblock title %}
+{% block content %}
+
+  <h1>Welcome {{ name }}</h1>
+
+Related RT ticket number: <input type="text" size="20">
+<input type="button" value="Create Chat Token">
+
+<br />
+<br />
+
+  <table>
+    <tr>
+      <td><b>RT ticket</b></td>
+      <td><b>Created on</b></td>
+      <td><b>Expires on</b></td>
+      <td><b>Token</b></td>
+      <td><b>Copy URL</b></td>
+      <td><b>Delete</b></td>
+    </tr>
+    <tr>
+      <td>301561</td>
+      <td>2014-03-15</td>
+      <td>2014-03-17</td>
+      <td>ajsi123192asmda928123n32232lls</td>
+      <td><input type="button" value="Copy URL"></td>
+      <td><input type="button" value="Delete Token"></td>
+    </tr>
+    <tr>
+      <td>213126</td>
+      <td>2014-03-15</td>
+      <td>2014-03-17</td>
+      <td>ajsi123192asmda928123n32232lls</td>
+      <td><input type="button" value="Copy URL"></td>
+      <td><input type="button" value="Delete Token"></td>
+    </tr>
+    <tr>
+      <td>231234</td>
+      <td>2014-03-15</td>
+      <td>2014-03-17</td>
+      <td>ajsi123192asmda928123n32232lls</td>
+      <td><input type="button" value="Copy URL"></td>
+      <td><input type="button" value="Delete Token"></td>
+    </tr>
+    <tr>
+      <td>213154</td>
+      <td>2014-03-15</td>
+      <td>2014-03-17</td>
+      <td>ajsi123192asmda928123n32232lls</td>
+      <td><input type="button" value="Copy URL"></td>
+      <td><input type="button" value="Delete Token"></td>
+    </tr>
+  </table>
+{% endblock content %}
