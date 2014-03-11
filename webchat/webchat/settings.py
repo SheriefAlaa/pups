@@ -1,7 +1,7 @@
 # Django settings for webchat project.
 import os
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -12,8 +12,8 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'webchatDB/webchatDB.db')),                      # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': '',                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -126,21 +126,8 @@ INSTALLED_APPS = (
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'webchat',
 )
 
-# TEMPLATE_CONTEXT_PROCESSORS = (
-# "django.contrib.auth.context_processors.auth",
-# "django.core.context_processors.debug",
-# "django.core.context_processors.i18n",
-# "django.core.context_processors.media",
-# "django.core.context_processors.static",
-# "django.core.context_processors.tz",
-# "django.contrib.messages.context_processors.messages"
-# )
-
-
-#MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.
