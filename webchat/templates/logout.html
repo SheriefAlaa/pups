@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Webchat - Logout{% endblock title %}
+
+{% block script %}
+<script type="text/javascript">
+	setTimeout(function () {
+		window.location.href = "login"
+	}, 3000);
+</script>
+		
+{% endblock script %}
+
+{% block content %}
+
+{% if was_logged %}
+You just logged out, redirecting...
+{% endif %}
+
+{% if was_not_logged %}
+You are not logged to begin with, redirecting...
+{% endif %}
+
+{% endblock content %}
