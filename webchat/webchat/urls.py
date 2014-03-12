@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from webchat.views import home, login, logout, change_password, tokens, not_found, logged_in
+from webchat.views import *
 #from django.views.generic.simple import direct_to_template
 
 # Uncomment the next two lines to enable the admin:
@@ -23,8 +23,10 @@ urlpatterns = patterns('',
     url(r'^login$', login),
     url(r'^logout$', logout), 
     url(r'^chpass$', change_password), 
-    url(r'^tokens$', tokens), # Token managment page
     url(r'^logged$', logged_in),
-    url(r'^.*$', not_found), # has to be the last rule.
+    url(r'^tokens$', tokens_page), # Token managment page
+    url(r'^create_token$', create_token), 
+    url(r'^edit_token$', edit_token), 
+    url(r'^.*$', not_found), # Catches everything that's not a page and has to be the last rule.
 
 )

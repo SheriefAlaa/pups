@@ -1,8 +1,12 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
-from webchat.models import LoginForm, ChangePassForm
+from webchat.models import LoginForm, ChangePassForm, Token
 from django.contrib import auth
-
+from django.contrib.auth.models import User
+import uuid
+from datetime import date, timedelta
+from django.contrib import messages
+from webchat.utils import is_message
 
 def login(request):
 	if request.user.is_authenticated():
@@ -58,27 +62,67 @@ def change_password(request):
 	else:
 		return redirect('/login')
 
+def logged_in(request):
+	return redirect('/tokens')
 
-def tokens(request):
+def tokens_page(request):
+
+	data = Token.objects.filter(owner = User.objects.get(id = request.user.id))
+
 	if request.user.is_authenticated():
-		return render(request, 'tokens.html', {'name' : request.user.username} )
+		return render(request, 'tokens.html', {'name' : request.user.username, 'id' : request.user.id, 'tokens' : data } )
 	else:
 		return redirect('/login')
 	
 
-#def delete_token(token):
-#def create_token()
-#def edit_token()
-#def view_tokens(sa_id)
+def create_token(request):
+	expiration_days_count = 3
 
+	if request.user.is_authenticated():
+		if request.method == 'POST':
+			ticket_id = request.POST.get('rt_ticket', '')
+
+			try:
+			 	Token.objects.get(rt_ticket = ticket_id)
+				# Ticket already exists
+				return redirect('/tokens')
+			except:
+				pass
+
+			if ticket_id.isdigit():
+				token_query = Token(
+					owner = User.objects.get(id = request.user.id),
+				 	token = uuid.uuid4().hex,
+				 	created = date.today(), 
+				 	expires = date.today() + timedelta(expiration_days_count),
+				 	rt_ticket = ticket_id
+				 	)
+
+				if (token_query.save()):
+					request.session['token_saved'] = True
+				else:
+					request.session['token_saved'] = False
+				# Save and report success
+				return redirect('/tokens')
+			else:
+				# Say RT tickets need to be numbers only.
+				return redirect('/tokens')
+		else:
+			# Say nothing happened, request needs to be POST
+			return redirect('/tokens')
+	# Say session expired
+	return redirect('/login')
+
+def edit_token(request):
+	'''
+	Handles Edit RT ticket, Delete a whole row
+	'''
+ 	moo = request.POST.getlist("ticket_list")
+	# also set some session variable to report success.
+	return render(request, 'test_page.html', {'moo' : moo})
 
 def not_found(request):
 	return render(request, '404.html')
-
-
-def logged_in(request):
-	return HttpResponse("Hi, you are already logged in, would you like to Logout?")
-
 
 
 def home(request):
