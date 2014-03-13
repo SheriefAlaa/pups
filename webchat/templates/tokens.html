@@ -4,18 +4,19 @@
 
   <h1>Welcome {{ name }}</h1>
 
-<form method="post" action="/create_token">
+<!--<form method="post" action="/create_token">-->
+<form method="post" action="/tokens">
 {% csrf_token %}
   <table>
     <tr>
       <td>Related RT ticket number:</td>
       <td><input name="rt_ticket" type="text" size="20"></td>
-      <td><input name="submit "type="submit" value="Create Chat Token"></td>
+      <td><input name="create_token" type="submit" value="Create Chat Token"></td>
     </tr>
   </table>
 </form>
 
-<form method="post" action="/edit_token">
+<form method="post" action="/tokens">
 {% csrf_token %}
   <table>
     <tr>
@@ -29,7 +30,11 @@
  {% for token in tokens %}
     <tr>
       <td><input type="checkbox" name="ticket_list" value="{{token.t_id}}"></td>
+      {% if token.t_id in edit_list %}
+      <td><input type="text" size="15" name="edited_ticket" value="{{token.rt_ticket}}"></td>
+      {% else %}
       <td>{{token.rt_ticket}}</td>
+      {% endif %}
       <td>{{token.created}}</td>
       <td>{{token.expires}}</td>
       <td>{{token.token}}</td>
@@ -39,10 +44,18 @@
  <tr>
    <td></td>
    <td></td>
-   <td><input type="submit" value="Delete"></td>
-   <td><input type="submit" value="Edit"></td>
+   {% if edit_state%}
+   <td></td>
+   <td ><input type="submit" name="save" value="Save changes"></td>
+   <td></td>
+   {% else %}
+   <td><input type="submit" name="edit" value="Edit"></td>
+   <td><input type="submit" name="delete" value="Delete"></td>
+    {% endif %}
    <td></td>
  </tr>
   </table>
 </form>
+{{req}}
+{{list}}
 {% endblock content %}
