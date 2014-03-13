@@ -32,12 +32,26 @@ class Token(models.Model):
 		else:
 			return False
 
-	# def update_tokens(self, ticket_id_list, modified_ticket_list):
-	# 	tokens = Token.objects.filter(t_id__in = ticket_id_list)
-	# 	for token in tokens:
-	# 		token.
+	def update_tokens(self, original_ticket_list, modified_ticket_list):
+		'''
+		This function will first check if any items in modified_ticket_list
+		already exist in the database, if so it will return the bad ticket
+		in a dict, if not, it will update the database using 
+		original_ticket_list and return True
+		'''
+		result = []
+		for rt_ticket in modified_ticket_list:
+			if self.exists(rt_ticket):
+				result.append(rt_ticket)
 
-
+		# Found that someone already took a ticket you are trying to modify
+		if len(result) != 0:
+			return result
+		
+		# Update
+		for i in range(len(original_ticket_list)):
+			Token.objects.filter(rt_ticket = original_ticket_list[i]).update(rt_ticket = modified_ticket_list[i])
+		return True
 
 	def delete_token(self, t_id_list):
 		count = 0

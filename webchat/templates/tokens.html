@@ -20,25 +20,30 @@
 {% csrf_token %}
   <table>
     <tr>
+      {% if not edit_state %}
       <td><b>Select</b></td>
+      {% endif %}
       <td><b>RT ticket</b></td>
       <td><b>Created on</b></td>
       <td><b>Expires on</b></td>
-      <td><b>Token</b></td>
-      <td><b>Copy URL</b></td>
+      <td><b>Token URL</b></td>
     </tr>
  {% for token in tokens %}
     <tr>
+      {% if not edit_state %}
       <td><input type="checkbox" name="ticket_list" value="{{token.t_id}}"></td>
-      {% if token.t_id in edit_list %}
-      <td><input type="text" size="15" name="edited_ticket" value="{{token.rt_ticket}}"></td>
+      {% endif %}
+      {% if token.t_id in to_edit_list %}
+      <td>
+        <input type="hidden" name="original_ticket_list" value="{{token.rt_ticket}}" >
+        <input type="text" size="15" name="modified_ticket_list" value="{{token.rt_ticket}}">
+      </td>
       {% else %}
       <td>{{token.rt_ticket}}</td>
       {% endif %}
       <td>{{token.created}}</td>
       <td>{{token.expires}}</td>
-      <td>{{token.token}}</td>
-      <td><input type="button" value="Copy URL"></td>
+      <td><textarea rows="1" cols="70" readonly>https://webchat.torproject.org/chat/{{token.token}}</textarea></td>
     </tr>
  {% endfor %}
  <tr>
@@ -56,6 +61,4 @@
  </tr>
   </table>
 </form>
-{{req}}
-{{list}}
 {% endblock content %}

@@ -7,7 +7,6 @@ from webchatapp.models import LoginForm, ChangePassForm, Token
 
 # TODO:
 # Unify feedback messages using django's messages framework.
-# The token_management needs work (edit state, save, etc..)
 # Client side functions (home, check_token and chat)
 
 def login(request):
@@ -60,8 +59,8 @@ def logged_in(request):
 
 def tokens_page(request):
 	
+	EXPIRATION_DAYS = 3
 	token = Token()
-	expiration_days = 3
 
 	# Viewing all tokens owned by logged in assistant
 	if request.user.is_authenticated():
@@ -77,8 +76,8 @@ def tokens_page(request):
 		if token.exists(ticket_id):
 			# Leave a message: RT_ticket exists
 			return redirect('/tokens')
-		elif ticket_id.isdigit() and token.create_token(request.user.id, expiration_days, ticket_id):
-			# Leave a message that the token was sucessfully saved.
+		elif ticket_id.isdigit() and token.create_token(request.user.id, EXPIRATION_DAYS, ticket_id):
+			# Leave a message that the token was successfully saved.
 			return redirect('/tokens')
 		else:
 			# Failed. reason: either RT ticket contains letters or cannot query db.
@@ -94,32 +93,30 @@ def tokens_page(request):
 	# Enter the Edit state
 	if "edit" in request.POST:
 		# Remember what got selected for editing
-		request.session['edit_list'] = token.parse_to_int(request.POST.getlist("ticket_list"))
+		request.session['to_edit_list'] = token.parse_to_int(request.POST.getlist("ticket_list"))
 		params = {
 			'name' : request.user.username,
 			'tokens' : token.get_assistant_tokens(User.objects.get(id = request.user.id)),
-			'edit_list' : request.session['edit_list'],
+			'to_edit_list' : request.session['to_edit_list'],
 			'edit_state' : True,
 		}
 		return render(request, 'tokens.html', params)
 
 	# Save the edited tickets and go back to view state
 	if "save" in request.POST:
-		#if token.update_tokens(request.session['edit_list'], request.POST.getlist("ticket_list")):
-			# Success message
-		#	return redirect('/tokens')
-		#else:
-			# Failure message
-		params = {
-			'name' : request.user.username,
-			'tokens' : token.get_assistant_tokens(User.objects.get(id = request.user.id)),
-			'edit_state' : False,
-			'req' : request.POST,
-			'list' : request.POST.getlist('edited_ticket')
-		}
-		return render(request, 'tokens.html', params)
-		#return redirect('/tokens')
+		query = token.update_tokens(request.POST.getlist('original_ticket_list'), request.POST.getlist('modified_ticket_list'))
 
+		if query:
+			params = {
+				'name' : request.user.username,
+				'tokens' : token.get_assistant_tokens(User.objects.get(id = request.user.id))
+			}
+			return render(request, 'tokens.html', params)
+		else:
+			# Failure message: Some of the $tickets you are trying to edit are already taken by another assistant
+			return redirect('/logged')
+
+########### Client side views ###########
 def not_found(request):
 	return render(request, '404.html')
 
