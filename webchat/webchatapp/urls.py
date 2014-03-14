@@ -26,5 +26,4 @@ urlpatterns = patterns('',
     url(r'^logged$', logged_in),
     url(r'^tokens$', tokens_page), # Token management page
     url(r'^.*$', not_found), # Catches everything that's not a page and has to be the last rule.
-
 )

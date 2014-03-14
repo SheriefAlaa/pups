@@ -4,7 +4,12 @@
 
   <h1>Welcome {{ name }}</h1>
 
-<!--<form method="post" action="/create_token">-->
+{% if messages %}
+    {% for message in messages %}
+        <b>{{message}}</b> <br />
+    {% endfor %}
+{% endif %}
+
 <form method="post" action="/tokens">
 {% csrf_token %}
   <table>
@@ -61,4 +66,7 @@
  </tr>
   </table>
 </form>
+{% for i in m %}
+{{m}}
+{%endfor%}
 {% endblock content %}

@@ -3,11 +3,14 @@
 
 {% block form-tag %}
 
-{% if bad_login %}
-<p> Invalid username or password, retry. </p>
+{% if messages %}
+    {% for message in messages %}
+    <b>{{message}}</b>
+    {% endfor %}
 {% endif %}
 
 <form method="post" action="/login">{% csrf_token %}
 {{ form.as_p}}
 <input type="submit" value="Login">
+</form>
 {% endblock form-tag %}
