@@ -2,30 +2,26 @@ from django.db import models
 from django.contrib.auth.models import User
 from django import forms
 import uuid
-from datetime import date, timedelta
-from django.core.exceptions import ObjectDoesNotExist
+from datetime import datetime, timedelta
 
 class Token(models.Model):
     t_id  = models.AutoField(primary_key=True)
     owner = models.ForeignKey(User)
     token = models.CharField(max_length=64)
-    created = models.DateField()
-    expires = models.DateField()
-    rt_ticket = models.CharField(max_length=30)
+    created = models.DateTimeField()
+    expires = models.DateTimeField()
+    comment = models.CharField(max_length=128)
 
     def __unicode__(self):
-        return u'ID: %s Owner: %s Ticket: %s' % (self.t_id, self.owner, self.rt_ticket)
+        return u'ID: %s Owner: %s' % (self.t_id, self.owner)
 
-    def data(self):
-        return{'t_id' : self.t_id, 'ticket': self.rt_ticket, 'token' : self.token, 'created' : self.created, 'expires' : self.expires}
-
-    def create_token(self, owner_id, expiration_days, ticket_id):
+    def create_token(self, owner_id, expiration_days, comment):
         q = Token(
                     owner = User.objects.get(id = owner_id),
                     token = uuid.uuid4().hex,
-                    created = date.today(), 
-                    expires = date.today() + timedelta(expiration_days),
-                    rt_ticket = ticket_id
+                     created = datetime.now(), 
+                     expires = datetime.now() + timedelta(expiration_days),
+                    comment = comment
                     )
         q.save()
 
@@ -33,27 +29,6 @@ class Token(models.Model):
             return True
         else:
             return False
-
-    def update_tokens(self, original_ticket_list, modified_ticket_list):
-        '''
-        This function will first check if any items in modified_ticket_list
-        already exist in the database, if so it will return the bad ticket
-        in a dict, if not, it will update the database using 
-        original_ticket_list and return True
-        '''
-        result = []
-        for rt_ticket in modified_ticket_list:
-            if self.exists(rt_ticket):
-                result.append(rt_ticket)
-
-        # Found that someone already took a ticket you are trying to modify
-        if len(result) != 0:
-            return result
-        
-        # Update
-        for i in range(len(original_ticket_list)):
-            Token.objects.filter(rt_ticket = original_ticket_list[i]).update(rt_ticket = modified_ticket_list[i])
-        return True
 
     def delete_token(self, t_id_list):
         count = 0
@@ -68,22 +43,14 @@ class Token(models.Model):
         else:
             return False
 
-    def exists(self, ticket_id):
-        try:
-            token = Token.objects.get(rt_ticket = ticket_id)
-        except ObjectDoesNotExist:
-            return False
-        return True
-
     def get_assistant_tokens(self, assistant):
-        return Token.objects.filter(owner = assistant)
+        return Token.objects.filter(owner = assistant).order_by('-t_id')
 
     def parse_to_int(self, edit_list):
         result = []
         for i in edit_list:
             result.append(int(i))
         return result
-
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=32)

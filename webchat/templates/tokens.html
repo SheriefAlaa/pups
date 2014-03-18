@@ -14,59 +14,34 @@
 {% csrf_token %}
   <table>
     <tr>
-      <td>Related RT ticket number:</td>
-      <td><input name="rt_ticket" type="text" size="20"></td>
+      <td>Comment (optional):</td>
+      <td><input name="comment" type="text" size="76" ></td>
       <td><input name="create_token" type="submit" value="Create Chat Token"></td>
     </tr>
   </table>
-</form>
-
-<form method="post" action="/tokens">
-{% csrf_token %}
   <table>
     <tr>
-      {% if not edit_state %}
       <td><b>Select</b></td>
-      {% endif %}
-      <td><b>RT ticket</b></td>
+      <td><b>Token URL</b></td>
       <td><b>Created on</b></td>
       <td><b>Expires on</b></td>
-      <td><b>Token URL</b></td>
+      <td><b>Comment</b></td>
+      <td><input name="delete" type="submit"  value="Delete Selected"></td>
     </tr>
  {% for token in tokens %}
     <tr>
-      {% if not edit_state %}
-      <td><input type="checkbox" name="ticket_list" value="{{token.t_id}}"></td>
-      {% endif %}
-      {% if token.t_id in to_edit_list %}
-      <td>
-        <input type="hidden" name="original_ticket_list" value="{{token.rt_ticket}}" >
-        <input type="text" size="15" name="modified_ticket_list" value="{{token.rt_ticket}}">
-      </td>
-      {% else %}
-      <td>{{token.rt_ticket}}</td>
-      {% endif %}
-      <td>{{token.created}}</td>
-      <td>{{token.expires}}</td>
-      <td><textarea rows="1" cols="70" readonly>https://webchat.torproject.org/chat/{{token.token}}</textarea></td>
+      <td><input name="selected_list" type="checkbox" value="{{token.t_id}}"></td>
+      <td>https://webchat.torproject.org/chat/{{token.token}}</td>
+      <td>{{token.created|date:"Y-m-d G:i"}}</td>
+      <td>{{token.expires|date:"Y-m-d G:i"}}</td>
+      <td>{{token.comment}}</td>
     </tr>
  {% endfor %}
  <tr>
    <td></td>
    <td></td>
-   {% if edit_state%}
-   <td></td>
-   <td ><input type="submit" name="save" value="Save changes"></td>
-   <td></td>
-   {% else %}
-   <td><input type="submit" name="edit" value="Edit"></td>
-   <td><input type="submit" name="delete" value="Delete"></td>
-    {% endif %}
    <td></td>
  </tr>
   </table>
 </form>
-{% for i in m %}
-{{m}}
-{%endfor%}
 {% endblock content %}
