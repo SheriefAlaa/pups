@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 import sys
 from django.contrib.auth.models import User
 from django.db import IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
 
 class Command(BaseCommand):
     help = 'Deletes a support assistant account'
@@ -13,7 +14,7 @@ class Command(BaseCommand):
 
         try:
             user = User.objects.get(username = args[0])
-            user.save()
+            user.delete()
             print "Deleted: %s" % args[0]
-        except IntegrityError:
-            print '"%s" already exists, if you want to delete it use: $ manage.py deleteuser %s' % (args[0], args[0])
+        except ObjectDoesNotExist:
+            print '"%s" does not exist in the database.' % (args[0])
