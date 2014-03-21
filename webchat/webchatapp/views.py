@@ -104,20 +104,21 @@ def tokens_page(request):
             return redirect('/tokens')
 
 ########### Client side views ###########
-def not_found(request):
-    return render(request, '404.html')
+def chat(request, token):
+    t = Token()
+    t_obj = t.get_token(token)
 
+    params = {
+        'server' : "xmpp.wonderland.lit",
+        'bosh' : "http-bind/",
+        'receiver' : "alice@wonderland.lit",
+        'receiver_name' : "Alice"
+    }
+
+    if t_obj:
+        return render(request, 'prodromus.html', params)
+    else:
+        return HttpResponse("This is not a vaild chat token")
 
 def home(request):
     return render(request, 'index.html')
-
-# check_token will be triggered when someone visits
-# webchat.torproject.org/chat/32digitsandnumberscode
-
-def check_token(request):
-    return HttpResponse("Checking token...")
-
-# if the user passed checkToken then let the user
-# enter his name and chat with an Assistant.
-def chat(request):
-    return render(request, 'prodromus.html')

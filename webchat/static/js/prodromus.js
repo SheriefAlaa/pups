@@ -35,49 +35,50 @@
  * 
  * @license Affero General Public License
  */
-var Prodromus = {
-    // version constant
-    VERSION: '0.2',
-    
-    // initialize connection property
-    connection: null
-}
 
-Prodromus.config = {
+// var Prodromus = {
+//     // version constant
+//     VERSION: '0.2',
     
-    // ID of element (with prepended #), DOM element
-    // or jQuery object of the element which should 
-    // get used for the PRODROMUS client
-    'TARGET_ELEMENT': '#prodromus',
-    
-    // XMPP server to connect to (should be accessible via BOSH service).
-    // Authentication gets done via SASL ANONYMOUS, so you should use a 
-    // server which supports that authentication type.
-    'XMPP_SERVER': "xmpp.wonderland.lit",
+//     // initialize connection property
+//     connection: null
+// }
 
-    // BOSH service (should be absolute or relative path). This might be a
-    // tricky part due to the JavaScript same origin policy. The easiest
-    // way is to setup a reverse proxy under Apache. This only requires 
-    // mod_proxy, mod_rewrite and a .htaccess file similar to the example
-    // supplied with PRODROMUS.
-    'BOSH_SERVICE': "http-bind/",
+// Prodromus.config = {
     
-    // JID of receiver
-    'RECEIVER': "alice@wonderland.lit",
+//     // ID of element (with prepended #), DOM element
+//     // or jQuery object of the element which should 
+//     // get used for the PRODROMUS client
+//     'TARGET_ELEMENT': '#prodromus',
     
-    // name of receiver
-    'RECEIVERNAME': "Alice",
+//     // XMPP server to connect to (should be accessible via BOSH service).
+//     // Authentication gets done via SASL ANONYMOUS, so you should use a 
+//     // server which supports that authentication type.
+//     'XMPP_SERVER': "xmpp.wonderland.lit",
+
+//     // BOSH service (should be absolute or relative path). This might be a
+//     // tricky part due to the JavaScript same origin policy. The easiest
+//     // way is to setup a reverse proxy under Apache. This only requires 
+//     // mod_proxy, mod_rewrite and a .htaccess file similar to the example
+//     // supplied with PRODROMUS.
+//     'BOSH_SERVICE': "http-bind/",
     
-    // leave this empty or fill in a default name
-    'SENDERNAME': '',
+//     // JID of receiver
+//     'RECEIVER': "alice@wonderland.lit",
     
-    // date format, syntax like php's date function
-    // (for US something like 'm-d-Y H:i:s', Germany like 'd.m.Y H:i:s')
-    'DATEFORMAT': 'm-d-Y H:i:s',
+//     // name of receiver
+//     'RECEIVERNAME': "Alice",
     
-    // language, currently supported: 'de' and 'en'
-    'LANGUAGE': 'en'
-}
+//     // leave this empty or fill in a default name
+//     'SENDERNAME': '',
+    
+//     // date format, syntax like php's date function
+//     // (for US something like 'm-d-Y H:i:s', Germany like 'd.m.Y H:i:s')
+//     'DATEFORMAT': 'm-d-Y H:i:s',
+    
+//     // language, currently supported: 'de' and 'en'
+//     'LANGUAGE': 'en'
+// }
 
 $(document).ready( function() {
     Prodromus.UI.initialize( $( Prodromus.config.TARGET_ELEMENT ) );

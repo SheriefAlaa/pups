@@ -10,23 +10,25 @@ Any version of Apache, Python 2.5 or above, python-django (1.4+), virtualenv and
 how to install:
 ===============
 
-1) Run: $ virtualenv ENV
-
-1) Clone the repo somewhere locally.
+* git clone https://github.com/SheriefAlaa/webchat.git
+* cd webchat/webchat && mkdir webchatDB
+* python manage.py syncdb (Would you like to create one now? (yes/no): no)
+* chown -R www-data:www-data webchatDB/ 
+* chmod -R 770 webchatDB/
+* python manage.py createuser username password
  
-2) Add the following to your httpd/apache2.conf:
+* Add the following to your httpd/apache2.conf:
 ```
-WSGIDaemonProcess example.com python-path=/home/USER/webchat:/ENV/lib/python2.7/site-packages
-WSGIProcessGroup example.com
+Alias /static/ /home/user/webchat/webchat/static/
  
-Alias /static/ /home/USER/webchat/static/
- 
-<Directory /home/USER/webchat/static>
-Order deny,allow
-Allow from all
+<Directory /home/user/webchat/webchat/static>
+  Order deny,allow
+  Allow from all
 </Directory>
-WSGIScriptAlias / /home/USER/webchat/webchat/wsgi.py
-<Directory /home/USER/webchat/webchat>
+ 
+WSGIScriptAlias / /home/user/webchat/webchat/webchatapp/wsgi.py
+WSGIPythonPath /home/user/webchat/webchat/
+<Directory /home/user/webchat/webchatapp>
  <Files wsgi.py>
    Order allow,deny
    Allow from all
@@ -34,12 +36,4 @@ WSGIScriptAlias / /home/USER/webchat/webchat/wsgi.py
 </Directory>
 ```
 
-3) Visit localhost/webchat from your browser.
- 
-note:
-=====
-1) webchat/webchat/settings.py line 26 (ALLOWED_HOSTS = ['*']) should be
-(ALLOWED_HOSTS = ['www.domainname.org'])
-
-2) On each change python files like view.py or urls.py you will need to restart apache.
-(this doesn't apply to templates and static files.)
+* Visit localhost/login from your browser.

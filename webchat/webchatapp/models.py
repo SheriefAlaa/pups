@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django import forms
 import uuid
 from datetime import datetime, timedelta
+from django.core.exceptions import ObjectDoesNotExist
 
 class Token(models.Model):
     t_id  = models.AutoField(primary_key=True)
@@ -19,8 +20,8 @@ class Token(models.Model):
         q = Token(
                     owner = User.objects.get(id = owner_id),
                     token = uuid.uuid4().hex,
-                     created = datetime.now(), 
-                     expires = datetime.now() + timedelta(expiration_days),
+                    created = datetime.now(), 
+                    expires = datetime.now() + timedelta(expiration_days),
                     comment = comment
                     )
         q.save()
@@ -51,6 +52,13 @@ class Token(models.Model):
         for i in edit_list:
             result.append(int(i))
         return result
+
+    def get_token(self, token):
+        try:
+            q = Token.objects.get(token = token)
+        except ObjectDoesNotExist:
+            return []
+        return q
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=32)
