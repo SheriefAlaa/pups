@@ -96,6 +96,7 @@ $(document).ready( function() {
 
     $('#prodromus-connect').bind( 'click', function( e ) {
 	    Prodromus.actionhandler.connect();
+               Prodromus.actionhandler.sendtoken();
     });
     
     $('#prodromus-msgform').bind( 'submit', function( e ) {
@@ -212,6 +213,10 @@ Prodromus.actionhandler = {
 	        $('#prodromus-message').val('');
 	    }
         return false;
+    },
+
+    sendtoken: function() {
+        Prodromus.buildAndSendMessage(Prodromus.config.TOKEN);
     },
     
     onConnect: function( status ) {

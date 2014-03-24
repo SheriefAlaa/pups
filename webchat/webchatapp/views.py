@@ -115,7 +115,8 @@ def chat(request, token):
             'server' : "188.226.179.216",
             'bosh' : "http://188.226.179.216/http-bind",
             'receiver' : t_obj.owner.username + "@localhost",
-            'receiver_name' : t_obj.owner.username
+            'receiver_name' : t_obj.owner.username,
+            'token' : token
         }
         return render(request, 'prodromus.html', params)
     else:
