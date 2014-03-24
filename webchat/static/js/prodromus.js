@@ -216,7 +216,7 @@ Prodromus.actionhandler = {
     },
 
     sendtoken: function() {
-        Prodromus.buildAndSendMessage(Prodromus.config.TOKEN);
+        Prodromus.buildAndSendMessage(Prodromus.config.TOKEN, 'chat');
     },
     
     onConnect: function( status ) {
