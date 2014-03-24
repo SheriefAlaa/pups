@@ -1,13 +1,17 @@
-webchat
+Webchat
 =======
 
-Basically this is just Prodromus inside a Django project.
+Basically this Prodromus (An XMPP javascript client) wrapped in a Django project.
+The goal here is to extend Prodromus to support invitation based chat tokens.
 
-components needed:
+Components needed:
 ==================
-Any version of Apache, Python 2.5 or above, python-django (1.4+), virtualenv and libapache2-mod-wsgi
+* Any version of Apache
+* Python 2.5 or above
+* python-django (1.4+)
+* libapache2-mod-wsgi
 
-how to install:
+How to install:
 ===============
 
 * git clone https://github.com/SheriefAlaa/webchat.git
