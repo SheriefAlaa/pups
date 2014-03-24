@@ -108,14 +108,15 @@ def chat(request, token):
     t = Token()
     t_obj = t.get_token(token)
 
-    params = {
-        'server' : "xmpp.wonderland.lit",
-        'bosh' : "http-bind/",
-        'receiver' : "alice@wonderland.lit",
-        'receiver_name' : "Alice"
-    }
-
     if t_obj:
+
+        # Testing params, should be replaced by a config class
+        params = {
+            'server' : "188.226.179.216",
+            'bosh' : "http://188.226.179.216/http-bind",
+            'receiver' : t_obj.owner.username + "@localhost",
+            'receiver_name' : t_obj.owner.username
+        }
         return render(request, 'prodromus.html', params)
     else:
         return HttpResponse("This is not a vaild chat token")
