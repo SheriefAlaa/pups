@@ -96,7 +96,6 @@ $(document).ready( function() {
 
     $('#prodromus-connect').bind( 'click', function( e ) {
 	    Prodromus.actionhandler.connect();
-               Prodromus.actionhandler.sendtoken();
     });
     
     $('#prodromus-msgform').bind( 'submit', function( e ) {
@@ -190,6 +189,9 @@ Prodromus.actionhandler = {
 	            setTimeout( 'Prodromus.connection.disconnect();', 1000 );
 	        }
 	    }
+
+        // After connecting send the token number?
+        Prodromus.actionhandler.sendtoken();
         return false;
     },
     
