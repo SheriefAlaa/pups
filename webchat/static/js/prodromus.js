@@ -87,7 +87,7 @@ $(document).ready( function() {
     
     // Uncomment the following lines to spy on the wire traffic.
     //Prodromus.connection.rawInput = function (data) { Prodromus.UI.log('RECV: ' + data, 'system'); };
-    Prodromus.connection.rawOutput = function (data) { Prodromus.UI.log('SEND: ' + data, 'system'); };
+    //Prodromus.connection.rawOutput = function (data) { Prodromus.UI.log('SEND: ' + data, 'system'); };
 
     // Uncomment the following line to see all the debug output.
     //Strophe.log = function (level, msg) { Prodromus.UI.log('LOG: ' + msg, 'system'); };
@@ -300,7 +300,7 @@ Prodromus.UI = {
         var pattern = 
              '<div class="message message{type}">' 
                 +'<span class="msgText">{message}</span>'
-                +'<span class="msgPerson">{person}<span class="msgTime">, {time}</span></span>'
+                +'<span class="msgPerson"><b>{person}</b><span class="msgTime">, {time}</span></span>'
             +'</div>';
         
         switch( type ) {
