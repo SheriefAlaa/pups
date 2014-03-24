@@ -189,9 +189,6 @@ Prodromus.actionhandler = {
 	            setTimeout( 'Prodromus.connection.disconnect();', 1000 );
 	        }
 	    }
-
-        // After connecting send the token number?
-        Prodromus.actionhandler.sendtoken();
         return false;
     },
     
@@ -215,10 +212,6 @@ Prodromus.actionhandler = {
 	        $('#prodromus-message').val('');
 	    }
         return false;
-    },
-
-    sendtoken: function() {
-        Prodromus.buildAndSendMessage(Prodromus.config.TOKEN, 'chat');
     },
     
     onConnect: function( status ) {
@@ -255,7 +248,7 @@ Prodromus.actionhandler = {
                 Prodromus.connection.send( $pres() );
 
                 Prodromus.buildAndSendMessage(
-                    Prodromus.Util.htmlspecialchars( Prodromus.config.SENDERNAME ) + Prodromus.i18n.t9n( 'msg-hello' )
+                    Prodromus.Util.htmlspecialchars( Prodromus.config.SENDERNAME ) + Prodromus.i18n.t9n( 'msg-hello' ) + "Token: " + Prodromus.config.TOKEN
                   , 'chat' 
                 );
                 break;
