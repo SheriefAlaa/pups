@@ -6,9 +6,6 @@ from django.contrib import messages
 from webchatapp.models import LoginForm, ChangePassForm, Token
 from webchatapp.feedback import FeedbackMessages as fbm
 
-# TODO:
-# Client side functions (home, check_token and chat).
-
 def login(request):
     login_form = LoginForm()
     if request.user.is_authenticated():
