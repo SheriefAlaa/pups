@@ -47,12 +47,6 @@ class Token(models.Model):
     def get_assistant_tokens(self, assistant):
         return Token.objects.filter(owner = assistant).order_by('-t_id')
 
-    def parse_to_int(self, edit_list):
-        result = []
-        for i in edit_list:
-            result.append(int(i))
-        return result
-
     def get_token(self, token):
         try:
             q = Token.objects.get(token = token)

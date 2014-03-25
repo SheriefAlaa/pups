@@ -110,7 +110,7 @@ def chat(request, token):
 
     if t_obj:
 
-        # Testing params, should be replaced by a config class
+        # Testing params, should be replaced by a config class later on
         params = {
             'server' : "188.226.179.216",
             'bosh' : "http://188.226.179.216/http-bind",

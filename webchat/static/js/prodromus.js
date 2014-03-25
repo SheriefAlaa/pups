@@ -36,49 +36,6 @@
  * @license Affero General Public License
  */
 
-// var Prodromus = {
-//     // version constant
-//     VERSION: '0.2',
-    
-//     // initialize connection property
-//     connection: null
-// }
-
-// Prodromus.config = {
-    
-//     // ID of element (with prepended #), DOM element
-//     // or jQuery object of the element which should 
-//     // get used for the PRODROMUS client
-//     'TARGET_ELEMENT': '#prodromus',
-    
-//     // XMPP server to connect to (should be accessible via BOSH service).
-//     // Authentication gets done via SASL ANONYMOUS, so you should use a 
-//     // server which supports that authentication type.
-//     'XMPP_SERVER': "xmpp.wonderland.lit",
-
-//     // BOSH service (should be absolute or relative path). This might be a
-//     // tricky part due to the JavaScript same origin policy. The easiest
-//     // way is to setup a reverse proxy under Apache. This only requires 
-//     // mod_proxy, mod_rewrite and a .htaccess file similar to the example
-//     // supplied with PRODROMUS.
-//     'BOSH_SERVICE': "http-bind/",
-    
-//     // JID of receiver
-//     'RECEIVER': "alice@wonderland.lit",
-    
-//     // name of receiver
-//     'RECEIVERNAME': "Alice",
-    
-//     // leave this empty or fill in a default name
-//     'SENDERNAME': '',
-    
-//     // date format, syntax like php's date function
-//     // (for US something like 'm-d-Y H:i:s', Germany like 'd.m.Y H:i:s')
-//     'DATEFORMAT': 'm-d-Y H:i:s',
-    
-//     // language, currently supported: 'de' and 'en'
-//     'LANGUAGE': 'en'
-// }
 
 $(document).ready( function() {
     Prodromus.UI.initialize( $( Prodromus.config.TARGET_ELEMENT ) );
@@ -248,7 +205,7 @@ Prodromus.actionhandler = {
                 Prodromus.connection.send( $pres() );
 
                 Prodromus.buildAndSendMessage(
-                    Prodromus.Util.htmlspecialchars( Prodromus.config.SENDERNAME ) + Prodromus.i18n.t9n( 'msg-hello' ) + "Token: " + Prodromus.config.TOKEN
+                    Prodromus.Util.htmlspecialchars( Prodromus.config.SENDERNAME ) + Prodromus.i18n.t9n( 'msg-hello' ) + " Token: " + Prodromus.config.TOKEN
                   , 'chat' 
                 );
                 break;
@@ -371,7 +328,7 @@ Prodromus.t9n = {
         'send': 'Send',
         'failed-to-connect': 'Failed to connect to the server!',
         'msg-hello': ' joins the chat.',
-        'msg-goodbye': ' leaves the chat.'
+        'msg-goodbye': ' leaves the chat. '
     }
 
 }
