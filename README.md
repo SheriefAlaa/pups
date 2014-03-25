@@ -41,3 +41,17 @@ WSGIPythonPath /home/user/webchat/webchat/
 ```
 
 * Visit localhost/login from your browser.
+
+TODO:
+=====
+1) Custom django-admin command to clean up expired dates via a cron job.
+2) CSS, UI and branding.
+3) Add an is_present() method to check if a support assistant's presence.
+4) webchat.torproject.org should give the user an explanation on what is  going on and how to request a chat token in all help desk languages.
+
+Possible extensions:
+===============
+* Resize the chat window on visiting the link?
+* Give the support assistant the ability to send a notification email (eg: I am available for chatting for the next X hours).
+* Localization.
+* ..
