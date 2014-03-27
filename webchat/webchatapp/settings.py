@@ -99,3 +99,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 "django.contrib.messages.context_processors.messages",
 "django.core.context_processors.request"
 )
+
+# Webchat custom configuration 
+CONFIG = {
+    'server' : '188.226.179.216',# eg: 188.226.179.216
+    'bosh' : 'http://188.226.179.216/http-bind', # eg: http://188.226.179.216/http-bind
+    'receiver' : '@localhost', # XMPP support assistant address eg: @localhost or @whatever.lit
+    'expiration_days' : 3
+}
