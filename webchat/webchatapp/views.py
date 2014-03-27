@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from webchatapp.models import LoginForm, ChangePassForm, Token
 from webchatapp.feedback import FeedbackMessages as fbm
+from webchatapp import settings
 
 def login(request):
     login_form = LoginForm()
@@ -40,6 +41,7 @@ def change_password(request):
 
     if request.user.is_authenticated():
         if request.method != 'POST':
+        # If logged in and using GET display the change password page
             return render(request, 'change_password.html', {'form' : chpass_form})
     else:
         return redirect('/login')
@@ -48,23 +50,22 @@ def change_password(request):
         # Compare new passwords and check if current_pass is correct and save.
         if chpass_form.save(request, request.POST.get('current_pass', ''), request.POST.get('new_pass', ''), request.POST.get('new_pass_confirm', '')):
             messages.add_message(request, messages.INFO, fbm.good_pw )
-            return render(request, 'change_password.html', {'form' : chpass_form} )
+            return redirect('/chpass')
         else:
             messages.add_message(request, messages.INFO, fbm.bad_pw )
-            return render(request, 'change_password.html', {'form' : chpass_form} )
+            return redirect('/chpass')
     else:
-        return redirect('/login')
+        return redirect('/login') # This is not right!
 
 def logged_in(request):
     return redirect('/tokens')
 
 def tokens_page(request):
-
-    EXPIRATION_DAYS = 3
     token = Token()
     params = {
         'name' : request.user.username,
         'tokens' : token.get_assistant_tokens(User.objects.get(id = request.user.id)),
+        'server' : settings.CONFIG['server']
     }
 
     # View all tokens owned by logged in assistant
@@ -77,11 +78,11 @@ def tokens_page(request):
 
     # Create one token
     if 'create_token' in request.POST:
-        query = token.create_token(request.user.id, EXPIRATION_DAYS, request.POST.get('comment', ''))
+        query = token.create_token(request.user.id, settings.CONFIG['expiration_days'], request.POST.get('comment', ''))
         if query:
             messages.add_message(request, messages.INFO, fbm.token_created)
             request.session['new_token'] = True
-            return render(request, 'tokens.html', params )
+            return redirect('/tokens')
         else:
             messages.add_message(request, messages.INFO, fbm.db_error)
             return redirect('/tokens')
@@ -106,12 +107,10 @@ def chat(request, token):
     t_obj = t.get_token(token)
 
     if t_obj:
-
-        # Testing params, should be replaced by a config class later on
         params = {
-            'server' : "188.226.179.216",
-            'bosh' : "http://188.226.179.216/http-bind",
-            'receiver' : t_obj.owner.username + "@localhost",
+            'server' : settings.CONFIG['server'],
+            'bosh' : settings.CONFIG['bosh'],
+            'receiver' : t_obj.owner.username + settings.CONFIG['receiver'],
             'receiver_name' : t_obj.owner.username,
             'token' : token
         }
