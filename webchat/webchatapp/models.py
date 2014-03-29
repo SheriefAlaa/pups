@@ -1,9 +1,10 @@
-from django.db import models
-from django.contrib.auth.models import User
-from django import forms
 import uuid
 from datetime import datetime, timedelta
+from django.db import models
+from django import forms
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+
 
 class Token(models.Model):
     t_id  = models.AutoField(primary_key=True)
@@ -26,33 +27,31 @@ class Token(models.Model):
                     )
         q.save()
 
-        if q.t_id:
-            return True
-        else:
-            return False
+        return q.t_id is not None
+
+    def get_token(self, token):
+        try:
+            Token.objects.get(token = token)
+        except ObjectDoesNotExist:
+            return []
+        return Token.objects.get(token = token)
 
     def delete_token(self, t_id_list):
-        count = 0
+        
+        # Keeps track of how many items were deleted from the DB
+        delete_count = 0
 
         for t_id in t_id_list:
-            token = Token.objects.get(t_id = t_id)
-            if token is not None:
-                count = count + 1
+            token = get_token(t_id)
+            if token:
+                delete_count = delete_count + 1
                 token.delete()
-        if count == len(t_id_list):
-            return True
-        else:
-            return False
+        # Returns True if all selected tokens were deleted and false if not
+        return count == len(t_id_list) 
 
     def get_assistant_tokens(self, assistant):
         return Token.objects.filter(owner = assistant).order_by('-t_id')
 
-    def get_token(self, token):
-        try:
-            q = Token.objects.get(token = token)
-        except ObjectDoesNotExist:
-            return []
-        return q
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=32)
@@ -63,10 +62,12 @@ class ChangePassForm(forms.Form):
     new_pass = forms.CharField(max_length=32, widget=forms.PasswordInput)
     new_pass_confirm = forms.CharField(max_length=32, widget=forms.PasswordInput)
 
-    def save(self, request, current_pass, new_pass, new_pass_confirm):
-        if (new_pass == new_pass_confirm) and request.user.check_password(current_pass):
-            request.user.set_password(new_pass)
-            request.user.save()     
+    def change_password(self, request):
+        if (request.POST.get('new_pass') == request.POST.get('new_pass_confirm') ) and \
+            request.user.check_password(request.POST.get('current_pass') ):
+
+            request.user.set_password(request.POST.get('new_pass'))
+            request.user.save()
             return True
         else:
             return False

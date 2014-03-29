@@ -37,25 +37,20 @@ def logout(request):
         return redirect('/login')
 
 def change_password(request):
-    chpass_form = ChangePassForm()
+    if request.user.is_authenticated():  
+        form = ChangePassForm(request.POST or None)
+            
+        if form.is_valid(): # If all fields are valid change the password
+            if form.change_password(request):
+                messages.add_message(request, messages.INFO, fbm.good_pw)
+                return redirect('/chpass')
+            else:
+                messages.add_message(request, messages.INFO, fbm.bad_pw)
 
-    if request.user.is_authenticated():
-        if request.method != 'POST':
-        # If logged in and using GET display the change password page
-            return render(request, 'change_password.html', {'form' : chpass_form})
+        return render(request, 'change_password.html', {'form' : form})
     else:
-        return redirect('/login')
+        return redirect('/login') # Not logged in
 
-    if request.method == 'POST':
-        # Compare new passwords and check if current_pass is correct and save.
-        if chpass_form.save(request, request.POST.get('current_pass', ''), request.POST.get('new_pass', ''), request.POST.get('new_pass_confirm', '')):
-            messages.add_message(request, messages.INFO, fbm.good_pw )
-            return redirect('/chpass')
-        else:
-            messages.add_message(request, messages.INFO, fbm.bad_pw )
-            return redirect('/chpass')
-    else:
-        return redirect('/login') # This is not right!
 
 def logged_in(request):
     return redirect('/tokens')
@@ -70,8 +65,6 @@ def tokens_page(request):
 
     # View all tokens owned by logged in assistant
     if request.user.is_authenticated():
-        if request.method != 'POST':
-            request.session['new_token'] = False
             return render(request, 'tokens.html', params )
     else:
         return redirect('/login')
@@ -81,7 +74,6 @@ def tokens_page(request):
         query = token.create_token(request.user.id, settings.CONFIG['expiration_days'], request.POST.get('comment', ''))
         if query:
             messages.add_message(request, messages.INFO, fbm.token_created)
-            request.session['new_token'] = True
             return redirect('/tokens')
         else:
             messages.add_message(request, messages.INFO, fbm.db_error)
