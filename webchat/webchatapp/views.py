@@ -41,7 +41,7 @@ def change_password(request):
         form = ChangePassForm(request.POST or None)
             
         if form.is_valid(): # If all fields are valid change the password
-            if form.change_password(request):
+            if form.change_password(request, form.cleaned_data):
                 messages.add_message(request, messages.INFO, fbm.good_pw)
                 return redirect('/chpass')
             else:
