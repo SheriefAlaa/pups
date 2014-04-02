@@ -3,9 +3,10 @@ from django.shortcuts import render, redirect
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib import messages
-from webchatapp.models import LoginForm, ChangePassForm, Token
-from webchatapp.feedback import FeedbackMessages as fbm
-from webchatapp import settings
+from webchat.models import Token
+from webchat.forms import LoginForm, ChangePassForm
+from webchat.feedback import FeedbackMessages as fbm
+from pups import settings
 
 def login(request):
     login_form = LoginForm()
@@ -65,33 +66,33 @@ def tokens_page(request):
 
     # View all tokens owned by logged in assistant
     if request.user.is_authenticated():
-            return render(request, 'tokens.html', params )
+        # Create one token
+        if 'create_token' in request.POST:
+            query = token.create_token(request.user.id, settings.CONFIG['expiration_days'], request.POST.get('comment', ''))
+            if query:
+                messages.add_message(request, messages.INFO, fbm.token_created)
+                return redirect('/tokens')
+            else:
+                messages.add_message(request, messages.INFO, fbm.db_error)
+                return redirect('/tokens')
+
+        # Deletes one or more tokens
+        if 'delete' in request.POST:
+            # If nothing was selected
+            if len(request.POST.getlist("selected_list")) == 0:
+                messages.add_message(request, messages.INFO, fbm.empty_list)
+                return redirect('/tokens')
+                
+            if token.delete_token(request.POST.getlist("selected_list")):
+                messages.add_message(request, messages.INFO, fbm.delete_passed)
+                return redirect('/tokens')
+            else:
+                messages.add_message(request, messages.INFO, fbm.delete_failed)
+                return redirect('/tokens')
+
+        return render(request, 'tokens.html', params )
     else:
         return redirect('/login')
-
-    # Create one token
-    if 'create_token' in request.POST:
-        query = token.create_token(request.user.id, settings.CONFIG['expiration_days'], request.POST.get('comment', ''))
-        if query:
-            messages.add_message(request, messages.INFO, fbm.token_created)
-            return redirect('/tokens')
-        else:
-            messages.add_message(request, messages.INFO, fbm.db_error)
-            return redirect('/tokens')
-
-    # Deletes one or more tokens
-    if 'delete' in request.POST:
-        # If nothing was selected
-        if len(request.POST.getlist("selected_list")) == 0:
-            messages.add_message(request, messages.INFO, fbm.empty_list)
-            return redirect('/tokens')
-            
-        if token.delete_token(request.POST.getlist("selected_list")):
-            messages.add_message(request, messages.INFO, fbm.delete_passed)
-            return redirect('/tokens')
-        else:
-            messages.add_message(request, messages.INFO, fbm.delete_failed)
-            return redirect('/tokens')
 
 ########### Client side views ###########
 def chat(request, token):

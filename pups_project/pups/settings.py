@@ -1,8 +1,8 @@
-# Django settings for webchat project.
+# Django settings for pups project.
 import os
 
-#DEBUG = True
-DEBUG = False
+DEBUG = True
+#DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -14,7 +14,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'webchatDB/webchatDB.db')),  # Or path to database file if using sqlite3.
+        'NAME': os.path.abspath(os.path.join(os.path.dirname( __file__ ),  'databases/pups.db')),  # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -40,13 +40,15 @@ MEDIA_ROOT = ''
 
 MEDIA_URL = ''
 
-STATIC_ROOT = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'static/'))
+STATIC_ROOT = '' #os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'pups/static/'))
 
 STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'static/')),
+    os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'pups/static/')),
+    os.path.abspath(os.path.join(os.path.dirname( __file__ ),  'webchat/static/')),
+    os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'stats/static/')),
 )
 
 STATICFILES_FINDERS = (
@@ -71,13 +73,13 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'webchatapp.urls'
+ROOT_URLCONF = 'pups.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'webchatapp.wsgi.application'
+WSGI_APPLICATION = 'pups.wsgi.application'
 
 TEMPLATE_DIRS = (
-    os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'templates/')),
+    os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'templates/')),
 )
 
 INSTALLED_APPS = (
@@ -86,7 +88,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-    'django.contrib.staticfiles'
+    'django.contrib.staticfiles',
+    'pups',
+    'webchat',
+    'stats',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -100,9 +105,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 "django.core.context_processors.request"
 )
 
-# Webchat custom configuration 
+# pups custom configuration 
 CONFIG = {
-    'server' : '188.226.179.216',# eg: 188.226.179.216
+    'server' : '192.168.1.6:8000',# eg: 188.226.179.216
     'bosh' : 'http://188.226.179.216/http-bind', # eg: http://188.226.179.216/http-bind
     'receiver' : '@localhost', # XMPP support assistant address eg: @localhost or @whatever.lit
     'expiration_days' : 3

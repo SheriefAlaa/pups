@@ -1,7 +1,6 @@
 import uuid
 from datetime import datetime, timedelta
 from django.db import models
-from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -10,8 +9,8 @@ class Token(models.Model):
     t_id  = models.AutoField(primary_key=True)
     owner = models.ForeignKey(User)
     token = models.CharField(max_length=64)
-    created = models.DateTimeField()
-    expires = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add = True)
+    expires_at = models.DateTimeField()
     comment = models.CharField(max_length=128)
 
     def __unicode__(self):
@@ -21,8 +20,7 @@ class Token(models.Model):
         q = Token(
                     owner = User.objects.get(id = owner_id),
                     token = uuid.uuid4().hex,
-                    created = datetime.now(), 
-                    expires = datetime.now() + timedelta(expiration_days),
+                    expires_at = datetime.now() + timedelta(expiration_days),
                     comment = comment
                     )
         q.save()
@@ -36,38 +34,16 @@ class Token(models.Model):
             return []
         return Token.objects.get(token = token)
 
-    def delete_token(self, t_id_list):
-        
+    def delete_token(self, token_list):
         # Keeps track of how many items were deleted from the DB
         delete_count = 0
-
-        for t_id in t_id_list:
-            token = get_token(t_id)
+        for token in token_list:
+            token = self.get_token(token)
             if token:
                 delete_count = delete_count + 1
                 token.delete()
         # Returns True if all selected tokens were deleted and false if not
-        return count == len(t_id_list) 
+        return delete_count == len(token_list) 
 
     def get_assistant_tokens(self, assistant):
         return Token.objects.filter(owner = assistant).order_by('-t_id')
-
-
-class LoginForm(forms.Form):
-    username = forms.CharField(max_length=32)
-    password = forms.CharField(max_length=32, widget=forms.PasswordInput)
-
-class ChangePassForm(forms.Form):
-    current_pass = forms.CharField(max_length=32, widget=forms.PasswordInput)
-    new_pass = forms.CharField(max_length=32, widget=forms.PasswordInput)
-    new_pass_confirm = forms.CharField(max_length=32, widget=forms.PasswordInput)
-
-    def change_password(self, request, data):
-        if (data['new_pass'] == data['new_pass_confirm'] ) and \
-            request.user.check_password(data['current_pass'] ):
-
-            request.user.set_password(data['new_pass'])
-            request.user.save()
-            return True
-        else:
-            return False

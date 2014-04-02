@@ -4,6 +4,10 @@
 
   <h1>Welcome {{ name }}</h1>
 
+  <p><a href="/chpass">Change Password</a></p>
+  <p><a href="/stats">stats</a></p>
+  <p><a href="/logout">Logout</a></p>
+
 {% if messages %}
     {% for message in messages %}
         <b>{{message}}</b> <br />
@@ -30,10 +34,10 @@
     </tr>
  {% for token in tokens %}
     <tr>
-      <td><input name="selected_list" type="checkbox" value="{{token.t_id}}"></td>
-      <td>https://webchat.torproject.org/chat/{{token.token}}</td>
-      <td>{{token.created|date:"Y-m-d G:i"}}</td>
-      <td>{{token.expires|date:"Y-m-d G:i"}}</td>
+      <td><input name="selected_list" type="checkbox" value="{{token.token}}"></td>
+      <td>http://{{server}}/chat/{{token.token}}</td> <!-- Should be replaced with https and the correct domain -->
+      <td>{{token.created_at|date:"Y-m-d G:i"}}</td>
+      <td>{{token.expires_at|date:"Y-m-d G:i"}}</td>
       <td>{{token.comment}}</td>
     </tr>
  {% endfor %}
