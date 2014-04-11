@@ -1,7 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib import messages
 from webchat.models import Token
@@ -55,12 +54,12 @@ def create_token(request):
 def delete_token(request):
     token = Token()
 
-    # If nothing was selected
+    # If nothing was selected redirect and complain
     if len(request.POST.getlist("selected_list")) == 0:
         messages.add_message(request, messages.INFO, fbm.empty_list)
         return redirect('/tokens')
 
-    # Delete tokens inside the list or redirect if can't access db.    
+    # Delete tokens inside the list or redirect if can't access db.
     if token.delete_token(request.POST.getlist("selected_list")):
         messages.add_message(request, messages.INFO, fbm.delete_passed)
         return redirect('/tokens')
