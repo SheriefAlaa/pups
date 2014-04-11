@@ -1,25 +1,27 @@
-Webchat
-=======
+Overview:
+=========
 
-Basically this Prodromus (An XMPP javascript client) wrapped in a Django project.
-The goal here is to extend Prodromus to support invitation based chat tokens.
+pups_project contains small projects that helps the support teams.
+
+* pups: The main Django app that handles login/logout/registration
+* webchat: Extends Prodromus (An XMPP javascript client) to support invitation based chat tokens.
+* stats: A CRUD tool that stores some text that can be edited by multiple users at same time.
 
 Components needed:
 ==================
 * Any version of Apache
 * Python 2.5 or above
-* python-django (1.4+)
+* python-django (1.4.5)
 * libapache2-mod-wsgi
 
 How to install:
 ===============
 
 * git clone https://github.com/SheriefAlaa/webchat.git
-* cd webchat/webchat && mkdir webchatDB
 * python manage.py syncdb (Would you like to create one now? (yes/no): no)
-* chown -R www-data:www-data webchatDB/ 
-* chmod -R 770 webchatDB/
-* python manage.py createuser username password
+* chown -R www-data:www-data databases/ 
+* chmod -R 770 databases/
+* python manage.py createuser USERNAME PASSWORD
  
 * Add the following to your httpd/apache2.conf:
 ```
@@ -30,9 +32,9 @@ Alias /static/ /home/user/webchat/webchat/static/
   Allow from all
 </Directory>
  
-WSGIScriptAlias / /home/user/webchat/webchat/webchatapp/wsgi.py
-WSGIPythonPath /home/user/webchat/webchat/
-<Directory /home/user/webchat/webchatapp>
+WSGIScriptAlias / /path/to/wsgi.py
+WSGIPythonPath /path/to/root/folder
+<Directory /path/to/pups>
  <Files wsgi.py>
    Order allow,deny
    Allow from all
