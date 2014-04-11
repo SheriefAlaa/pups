@@ -10,4 +10,4 @@ def custom_login(request):
     if request.user.is_authenticated():
         return redirect('/')
 
-    return login(request, 'login.html' 'login')
+    return login(request, 'login.html', 'login')
