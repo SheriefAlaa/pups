@@ -17,6 +17,5 @@ class FeedbackMessages():
 
     # token_page view messages
     empty_list = "There is nothing to delete, please select something."
-    delete_passed = "Successfully deleted what you selected."
-    delete_failed = "Error: Could not delete."
+    revoke_success = "Successfully revoked selected tokens."
     db_error = "Error: Something is wrong with the database."

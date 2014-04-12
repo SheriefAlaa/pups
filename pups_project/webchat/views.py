@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.utils import timezone
+from django.db.models import F
 from webchat.models import Token
 from webchat.forms import ChangePassForm
 from webchat.feedback import FeedbackMessages as fbm
@@ -29,17 +30,17 @@ def tokens_page(request):
     token = Token()
     params = {
         'name' : request.user.username,
-        'tokens' : token.get_assistant_tokens(User.objects.get(id = request.user.id)),
+        'tokens' : token.get_assistant_tokens(User.objects.get(id = request.user.id)).filter(expires_at__gt=F('created_at')),
         'server' : settings.CONFIG['server']
     }
-
+    
     # View all tokens owned by logged in assistant
     if 'create_token' in request.POST:
-        create_token(request)
+        return create_token(request)
 
-    # Deletes one or more tokens
-    if 'delete' in request.POST:
-        delete_token(request)
+    # Revokes one or more tokens
+    if 'revoke' in request.POST:
+        return revoke_token(request)
 
     return render(request, 'tokens.html', params )
 
@@ -53,7 +54,7 @@ def create_token(request):
         messages.add_message(request, messages.INFO, fbm.db_error)
         return redirect('/tokens')
 
-def delete_token(request):
+def revoke_token(request):
     token = Token()
 
     # If nothing was selected redirect and complain
@@ -62,11 +63,11 @@ def delete_token(request):
         return redirect('/tokens')
 
     # Delete tokens inside the list or redirect if can't access db.
-    if token.delete_token(request.POST.getlist("selected_list")):
-        messages.add_message(request, messages.INFO, fbm.delete_passed)
+    if token.revoke_token(request.POST.getlist("selected_list")):
+        messages.add_message(request, messages.INFO, fbm.revoke_success)
         return redirect('/tokens')
     else:
-        messages.add_message(request, messages.INFO, fbm.delete_failed)
+        messages.add_message(request, messages.INFO, fbm.db_error)
         return redirect('/tokens')
 
 ########### Client side views ###########

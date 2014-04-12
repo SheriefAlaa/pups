@@ -35,22 +35,20 @@ class Token(models.Model):
             return []
         return Token.objects.get(token = token)
 
-    def delete_token(self, token_list):
-        # Keeps track of how many items were deleted from the DB
-        delete_count = 0
-        for token in token_list:
-            token = self.get_token(token)
-            if token:
-                delete_count = delete_count + 1
-                token.delete()
-        # Returns True if all selected tokens were deleted and false if not
-        return delete_count == len(token_list) 
-
     def revoke_token(self, token_list):
         '''
-        Revokes a token by modifiying the expiration date.
+        Sets the expiration date equals to the creation date of a token or more
         '''
-        pass
+        success = True
+
+        for token in token_list:
+            token = self.get_token(token)
+            if token and (success == True):
+                token.expires_at = token.created_at
+                token.save()
+            else:
+                return False
+        return True
 
     def get_assistant_tokens(self, assistant):
         return Token.objects.filter(owner = assistant).order_by('-t_id')
