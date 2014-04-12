@@ -1,8 +1,10 @@
 from django.http import HttpResponse
+from datetime import timedelta
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.utils import timezone
 from webchat.models import Token
 from webchat.forms import ChangePassForm
 from webchat.feedback import FeedbackMessages as fbm
@@ -69,19 +71,29 @@ def delete_token(request):
 
 ########### Client side views ###########
 def chat(request, token):
+    '''
+    Offers a chat session though Prodromus-client if the token exists
+    and did not expire.
+    '''
+
     t = Token()
     t_obj = t.get_token(token)
 
     if t_obj:
-        params = {
-            'server' : settings.CONFIG['server'],
-            'bosh' : settings.CONFIG['bosh'],
-            'receiver' : t_obj.owner.username + settings.CONFIG['receiver'],
-            'receiver_name' : t_obj.owner.username,
-            'token' : token
-        }
-        return render(request, 'prodromus.html', params)
+        # Make sure token didn't expire
+        if t_obj.expires_at >  timezone.now():
+            params = {
+                'server' : settings.CONFIG['server'],
+                'bosh' : settings.CONFIG['bosh'],
+                'receiver' : t_obj.owner.username + settings.CONFIG['receiver'],
+                'receiver_name' : t_obj.owner.username,
+                'token' : token
+            }
+            return render(request, 'prodromus.html', params)
+        else:
+            return HttpResponse("This token expired, please email help@rt.torproject to get a new one.")
     else:
+        # Token is invalid (wrong input)
         return HttpResponse("This is not a vaild chat token")
 
 def home(request):

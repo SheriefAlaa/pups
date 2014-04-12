@@ -1,5 +1,6 @@
 import uuid
-from datetime import datetime, timedelta
+from datetime import timedelta
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
@@ -20,7 +21,7 @@ class Token(models.Model):
         q = Token(
                     owner = User.objects.get(id = owner_id),
                     token = uuid.uuid4().hex,
-                    expires_at = datetime.now() + timedelta(expiration_days),
+                    expires_at = timezone.now() + timedelta(expiration_days),
                     comment = comment
                     )
         q.save()
@@ -44,6 +45,12 @@ class Token(models.Model):
                 token.delete()
         # Returns True if all selected tokens were deleted and false if not
         return delete_count == len(token_list) 
+
+    def revoke_token(self, token_list):
+        '''
+        Revokes a token by modifiying the expiration date.
+        '''
+        pass
 
     def get_assistant_tokens(self, assistant):
         return Token.objects.filter(owner = assistant).order_by('-t_id')
