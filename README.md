@@ -25,9 +25,9 @@ How to install:
  
 * Add the following to your httpd/apache2.conf:
 ```
-Alias /static/ /home/user/webchat/webchat/static/
+Alias /static/ /home/user/path/to/static/folder/
  
-<Directory /home/user/webchat/webchat/static>
+<Directory /home/user/path/to/static/folder>
   Order deny,allow
   Allow from all
 </Directory>
