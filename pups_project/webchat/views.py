@@ -1,28 +1,12 @@
 from django.http import HttpResponse
-from datetime import timedelta
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib import messages
 from django.utils import timezone
-from webchat.models import Token
-from webchat.forms import ChangePassForm
+from django.contrib import messages
 from webchat.feedback import FeedbackMessages as fbm
+from webchat.models import Token
 from pups import settings
-
-@login_required
-def change_password(request):
-
-    form = ChangePassForm(request.POST or None)
-        
-    if form.is_valid(): # If all fields are valid change the password
-        if form.change_password(request, form.cleaned_data):
-            messages.add_message(request, messages.INFO, fbm.good_pw)
-            return redirect('/chpass')
-        else:
-            messages.add_message(request, messages.INFO, fbm.bad_pw)
-
-    return render(request, 'change_password.html', {'form' : form})
 
 @login_required
 def tokens_page(request):
@@ -70,7 +54,6 @@ def revoke_token(request):
         messages.add_message(request, messages.INFO, fbm.db_error)
         return redirect('/tokens')
 
-########### Client side views ###########
 def chat(request, token):
     '''
     Offers a chat session though Prodromus-client if the token exists
