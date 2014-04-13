@@ -25,9 +25,9 @@ How to install:
  
 * Add the following to your httpd/apache2.conf:
 ```
-Alias /static/ /home/user/path/to/static/folder/
+Alias /static/ /home/user/path/to/static/
  
-<Directory /home/user/path/to/static/folder>
+<Directory /home/user/path/to/static>
   Order deny,allow
   Allow from all
 </Directory>
@@ -35,7 +35,7 @@ Alias /static/ /home/user/path/to/static/folder/
 WSGIScriptAlias / /path/to/wsgi.py
 WSGIPythonPath /path/to/pups_project
 
-<Directory /path/to/pups>
+<Directory /path/to/pups_project/pups>
 <Files wsgi.py>
 Order deny,allow
 Allow from all
