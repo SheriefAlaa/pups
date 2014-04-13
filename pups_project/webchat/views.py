@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -61,24 +61,20 @@ def chat(request, token):
     '''
 
     t = Token()
-    t_obj = t.get_token(token)
+    t_obj = get_object_or_404(Token, token = token)
 
-    if t_obj:
-        # Make sure token didn't expire
-        if t_obj.expires_at >  timezone.now():
-            params = {
-                'server' : settings.CONFIG['server'],
-                'bosh' : settings.CONFIG['bosh'],
-                'receiver' : t_obj.owner.username + settings.CONFIG['receiver'],
-                'receiver_name' : t_obj.owner.username,
-                'token' : token
-            }
-            return render(request, 'prodromus.html', params)
-        else:
-            return HttpResponse("This token expired, please email help@rt.torproject to get a new one.")
+    # Make sure token didn't expire
+    if t_obj.expires_at >  timezone.now():
+        params = {
+            'server' : settings.CONFIG['server'],
+            'bosh' : settings.CONFIG['bosh'],
+            'receiver' : t_obj.owner.username + settings.CONFIG['receiver'],
+            'receiver_name' : t_obj.owner.username,
+            'token' : token
+        }
+        return render(request, 'prodromus.html', params)
     else:
-        # Token is invalid (wrong input)
-        return HttpResponse("This is not a vaild chat token")
+        return HttpResponse("This token expired, please email help@rt.torproject to get a new one.")
 
 def home(request):
     return render(request, 'index.html')
