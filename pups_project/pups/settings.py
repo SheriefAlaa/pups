@@ -1,5 +1,6 @@
 # Django settings for pups project.
 import os
+PROJECT_PATH = os.path.dirname(os.path.realpath(__file__))
 
 DEBUG = True
 #DEBUG = False
@@ -28,7 +29,7 @@ DATABASES = {
     }
 }
 
-ALLOWED_HOSTS = ['*'] # Should change this to www.example.com or something.
+ALLOWED_HOSTS = ['*']
 
 TIME_ZONE = 'GMT'
 
@@ -46,15 +47,14 @@ MEDIA_ROOT = ''
 
 MEDIA_URL = ''
 
-STATIC_ROOT = '' #os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'pups/static/'))
+STATIC_ROOT = '/home/sherief/Projects/Work/pups/pups_project/'
 
 STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'pups/static/')),
-    os.path.abspath(os.path.join(os.path.dirname( __file__ ),  'webchat/static/')),
-    os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'stats/static/')),
+   # '/home/sherief/Projects/Work/pups/pups_project/static',
+    #os.path.join(PROJECT_PATH, 'static'),
 )
 
 STATICFILES_FINDERS = (
@@ -113,7 +113,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 # pups custom configuration 
 CONFIG = {
-    'server' : '192.168.1.6:8000',# eg: 188.226.179.216
+    'server' : 'localhost:8000',# eg: 188.226.179.216
     'bosh' : 'http://188.226.179.216/http-bind', # eg: http://188.226.179.216/http-bind
     'receiver' : '@localhost', # XMPP support assistant address eg: @localhost or @whatever.lit
     'expiration_days' : 3
