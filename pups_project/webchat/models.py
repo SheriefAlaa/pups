@@ -30,10 +30,9 @@ class Token(models.Model):
 
     def get_token(self, token):
         try:
-            Token.objects.get(token = token)
+           return Token.objects.get(token = token)
         except ObjectDoesNotExist:
             return []
-        return Token.objects.get(token = token)
 
     def revoke_token(self, token_list):
         '''
