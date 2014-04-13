@@ -64,17 +64,17 @@ def chat(request, token):
     t_obj = get_object_or_404(Token, token = token)
 
     # Make sure token didn't expire
-    if t_obj.expires_at >  timezone.now():
-        params = {
-            'server' : settings.CONFIG['server'],
-            'bosh' : settings.CONFIG['bosh'],
-            'receiver' : t_obj.owner.username + settings.CONFIG['receiver'],
-            'receiver_name' : t_obj.owner.username,
-            'token' : token
-        }
-        return render(request, 'prodromus.html', params)
-    else:
+    if t_obj.expires_at < timezone.now():
         return HttpResponse("This token expired, please email help@rt.torproject to get a new one.")
+        
+    params = {
+        'server' : settings.CONFIG['server'],
+        'bosh' : settings.CONFIG['bosh'],
+        'receiver' : t_obj.owner.username + settings.CONFIG['receiver'],
+        'receiver_name' : t_obj.owner.username,
+        'token' : token
+    }
+    return render(request, 'prodromus.html', params)
 
 def home(request):
     return render(request, 'index.html')
