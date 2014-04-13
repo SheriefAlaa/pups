@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -65,7 +64,7 @@ def chat(request, token):
 
     # Make sure token didn't expire
     if t_obj.expires_at < timezone.now():
-        return HttpResponse("This token expired, please email help@rt.torproject to get a new one.")
+        return render(request, "token_exp.html")
         
     params = {
         'server' : settings.CONFIG['server'],
