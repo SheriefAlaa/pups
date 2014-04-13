@@ -47,14 +47,14 @@ MEDIA_ROOT = ''
 
 MEDIA_URL = ''
 
-STATIC_ROOT = '/home/sherief/Projects/Work/pups/pups_project/'
+STATIC_ROOT = ''
 
 STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-   # '/home/sherief/Projects/Work/pups/pups_project/static',
-    #os.path.join(PROJECT_PATH, 'static'),
+    # This is only for the dev server. In a real environment apache will take over.
+    os.path.join(PROJECT_PATH, '..', 'static'),
 )
 
 STATICFILES_FINDERS = (
