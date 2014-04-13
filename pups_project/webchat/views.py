@@ -28,11 +28,6 @@ def change_password(request):
 @login_required
 def tokens_page(request):
     token = Token()
-    params = {
-        'name' : request.user.username,
-        'tokens' : token.get_assistant_tokens(User.objects.get(id = request.user.id)).filter(expires_at__gt=F('created_at')),
-        'server' : settings.CONFIG['server']
-    }
     
     # View all tokens owned by logged in assistant
     if 'create_token' in request.POST:
@@ -42,6 +37,11 @@ def tokens_page(request):
     if 'revoke' in request.POST:
         return revoke_token(request)
 
+    params = {
+        'name' : request.user.username,
+        'tokens' : token.get_assistant_tokens(User.objects.get(id = request.user.id)).filter(expires_at__gt=F('created_at')),
+        'server' : settings.CONFIG['server']
+    }
     return render(request, 'tokens.html', params )
 
 def create_token(request):
