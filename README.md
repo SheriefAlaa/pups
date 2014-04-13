@@ -33,13 +33,15 @@ Alias /static/ /home/user/path/to/static/folder/
 </Directory>
  
 WSGIScriptAlias / /path/to/wsgi.py
-WSGIPythonPath /path/to/root/folder
+WSGIPythonPath /path/to/pups_project
+
 <Directory /path/to/pups>
- <Files wsgi.py>
-   Order allow,deny
-   Allow from all
- </Files>
+<Files wsgi.py>
+Order deny,allow
+Allow from all
+</Files>
 </Directory>
+
 ```
 
 * Visit localhost/login from your browser.
