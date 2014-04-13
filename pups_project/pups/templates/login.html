@@ -8,7 +8,14 @@
 {% endif %}
 
 <form method="post" action="/login">{% csrf_token %}
-{{ form.as_p}}
+  <p>
+    <label for="id_username">Username:</label> <input id="id_username" type="text" name="username" maxlength="30" />
+    <span style="color:red">{{ form.username.errors.as_text }}</span>
+  </p>
+  <p>
+    <label for="id_password">Password:</label> <input type="password" name="password" id="id_password" />
+    <span style="color:red">{{ form.password.errors.as_text }}</span>
+  </p>
 <input type="submit" value="Login">
 </form>
 {% endblock form-tag %}
