@@ -24,7 +24,7 @@ def change_password(request):
         if form.change_password(request, form.cleaned_data):
             messages.add_message(request, messages.INFO, fbm.good_pw)
             return redirect('/chpass')
-        else:
-            messages.add_message(request, messages.INFO, fbm.bad_pw)
+            
+        messages.add_message(request, messages.INFO, fbm.bad_pw)
 
     return render(request, 'change_password.html', {'form' : form})

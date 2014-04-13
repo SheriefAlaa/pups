@@ -40,17 +40,21 @@ class Token(models.Model):
         Sets the expiration date equals to the creation date of a token or more
         '''
 
-        # Do commit/rollback.
+        # TODO: commit/rollback
         success = True
 
         for token in token_list:
             token = self.get_token(token)
-            if token and (success == True):
-                token.expires_at = token.created_at
-                token.save()
-            else:
+            if not token and (success == True):
                 return False
+
+            token.expires_at = token.created_at
+            token.save()
+
         return True
 
     def get_assistant_tokens(self, assistant):
+        '''
+        Returns a list of non-expired/revoked assistant's tokens
+        '''
         return Token.objects.filter(owner = assistant).order_by('-t_id').filter(expires_at__gt=F('created_at'))

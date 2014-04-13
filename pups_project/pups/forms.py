@@ -8,7 +8,7 @@ class ChangePassForm(forms.Form):
     def change_password(self, request, data):
         if not ( (data['new_pass'] == data['new_pass_confirm']) and request.user.check_password(data['current_pass']) ):
             return False
-        else:
-            request.user.set_password(data['new_pass'])
-            request.user.save()
-            return True
+
+        request.user.set_password(data['new_pass'])
+        request.user.save()
+        return True

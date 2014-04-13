@@ -30,12 +30,12 @@ def tokens_page(request):
 def create_token(request):
     token = Token()
 
-    if token.create_token(request.user.id, settings.CONFIG['expiration_days'], request.POST.get('comment', '')):
-        messages.add_message(request, messages.INFO, fbm.token_created)
-        return redirect('/tokens')
-    else:
+    if not token.create_token(request.user.id, settings.CONFIG['expiration_days'], request.POST.get('comment', '')):
         messages.add_message(request, messages.INFO, fbm.db_error)
         return redirect('/tokens')
+    
+    messages.add_message(request, messages.INFO, fbm.token_created)
+    return redirect('/tokens')
 
 def revoke_token(request):
     token = Token()
@@ -46,12 +46,12 @@ def revoke_token(request):
         return redirect('/tokens')
 
     # Delete tokens inside the list or redirect if can't access db.
-    if token.revoke_token(request.POST.getlist("selected_list")):
-        messages.add_message(request, messages.INFO, fbm.revoke_success)
-        return redirect('/tokens')
-    else:
+    if not token.revoke_token(request.POST.getlist("selected_list")):
         messages.add_message(request, messages.INFO, fbm.db_error)
         return redirect('/tokens')
+    
+    messages.add_message(request, messages.INFO, fbm.revoke_success)
+    return redirect('/tokens')
 
 def chat(request, token):
     '''
