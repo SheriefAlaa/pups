@@ -13,6 +13,10 @@ urlpatterns = patterns('',
     url(r'^logout$', 'django.contrib.auth.views.logout_then_login'),
     url(r'^chpass$', 'pups.views.change_password'), 
 
+    # Pups views
+
+    url(r'^home$', 'pups.views.home'), 
+
     # Apps urls
     url(r'', include('webchat.urls', 'webchat')),
     url(r'', include('stats.urls', 'stats')),

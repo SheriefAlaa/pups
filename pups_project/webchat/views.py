@@ -75,5 +75,9 @@ def chat(request, token):
     }
     return render(request, 'prodromus.html', params)
 
-def home(request):
+def index(request):
+    '''
+    Explains what is webchat to the user and how to use it in all
+    help desk languages.
+    '''
     return render(request, 'index.html')

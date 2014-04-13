@@ -16,7 +16,7 @@ LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
 
 # Removes trailing slash in urls
-APPEND_SLASH=False
+APPEND_SLASH = False
 
 DATABASES = {
     'default': {
@@ -113,8 +113,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 # pups custom configuration 
 CONFIG = {
-    'server' : '',
-    'bosh' : '', 
-    'receiver' : '',
-    'expiration_days' :
+    'server' : 'localhost:8000',# eg: 188.226.179.216
+    'bosh' : 'http://188.226.179.216/http-bind', # eg: http://188.226.179.216/http-bind
+    'receiver' : '@localhost', # XMPP support assistant address eg: @localhost or @whatever.lit
+    'expiration_days' : 3
 }

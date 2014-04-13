@@ -1,12 +1,15 @@
 {% extends "base.html" %}
-{% block title %}Token Generator - Webchat{% endblock title %}
+{% block title %}Token Generator - Pups{% endblock title %}
+{% block extra_css %}
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-theme.min.css">
+{% endblock extra_css %}
+{% block script %}
+  <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+{% endblock script %}
 {% block content %}
-
-  <h1>Welcome {{ name }}</h1>
-
-  <p><a href="/chpass">Change Password</a></p>
-  <p><a href="/stats">stats</a></p>
-  <p><a href="/logout">Logout</a></p>
+{% include "nav_bar.html" %}
 
 {% if messages %}
     {% for message in messages %}

@@ -28,3 +28,7 @@ def change_password(request):
         messages.add_message(request, messages.INFO, fbm.bad_pw)
 
     return render(request, 'change_password.html', {'form' : form})
+
+@login_required
+def home(request):
+    return render(request, "pups.html")
