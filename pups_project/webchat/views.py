@@ -5,7 +5,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.utils import timezone
-from django.db.models import F
 from webchat.models import Token
 from webchat.forms import ChangePassForm
 from webchat.feedback import FeedbackMessages as fbm
@@ -29,19 +28,20 @@ def change_password(request):
 def tokens_page(request):
     token = Token()
     
-    # View all tokens owned by logged in assistant
+    # Create one token
     if 'create_token' in request.POST:
         return create_token(request)
 
-    # Revokes one or more tokens
+    # Revoke one or more tokens
     if 'revoke' in request.POST:
         return revoke_token(request)
 
     params = {
         'name' : request.user.username,
-        'tokens' : token.get_assistant_tokens(User.objects.get(id = request.user.id)).filter(expires_at__gt=F('created_at')),
+        'tokens' : token.get_assistant_tokens(User.objects.get(id = request.user.id)),
         'server' : settings.CONFIG['server']
     }
+    # View all tokens owned by logged in assistant
     return render(request, 'tokens.html', params )
 
 def create_token(request):

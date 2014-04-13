@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import F
 
 
 class Token(models.Model):
@@ -38,6 +39,8 @@ class Token(models.Model):
         '''
         Sets the expiration date equals to the creation date of a token or more
         '''
+
+        # Do commit/rollback.
         success = True
 
         for token in token_list:
@@ -50,4 +53,4 @@ class Token(models.Model):
         return True
 
     def get_assistant_tokens(self, assistant):
-        return Token.objects.filter(owner = assistant).order_by('-t_id')
+        return Token.objects.filter(owner = assistant).order_by('-t_id').filter(expires_at__gt=F('created_at'))
