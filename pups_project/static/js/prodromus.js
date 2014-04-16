@@ -36,12 +36,28 @@
  * @license Affero General Public License
  */
 
+/*
+* 2 = Something is really wrong with the server
+* 1 = available/chat
+* 0 = unavailable/away/dnd/xa
+*/
+
+var assistant_status = null;
 
 $(document).ready( function() {
     Prodromus.UI.initialize( $( Prodromus.config.TARGET_ELEMENT ) );
     
     Prodromus.connection = new Strophe.Connection( Prodromus.config.BOSH_SERVICE );
     
+
+    // Report status:
+    Prodromus.Checker.freeze_controls(true);
+    Prodromus.connection.connect( Prodromus.config.XMPP_SERVER, '');
+    setTimeout('Prodromus.Checker.subscribe();', 1000);
+    setTimeout('Prodromus.Checker.get_assistant_status();', 2000);
+    setTimeout('Prodromus.connection.disconnect(); Prodromus.Checker.freeze_controls(false);', 5000);
+
+
     // Uncomment the following lines to spy on the wire traffic.
     //Prodromus.connection.rawInput = function (data) { Prodromus.UI.log('RECV: ' + data, 'system'); };
     //Prodromus.connection.rawOutput = function (data) { Prodromus.UI.log('SEND: ' + data, 'system'); };
@@ -223,6 +239,7 @@ Prodromus.actionhandler = {
     }
 }
 
+
 Prodromus.UI = {
 
     initialize: function( el ) {
@@ -400,3 +417,85 @@ Date.replaceChars = {
 	U: function() { return this.getTime() / 1000; }
 };
 
+
+Prodromus.Checker =
+
+{
+    subscribe: function()
+    {
+        data = 
+        {
+            jid: Prodromus.config.RECEIVER,
+            name: Prodromus.config.RECEIVERNAME
+        }
+    var iq = $iq({type: "set"}).c("query", {xmlns: "jabber:iq:roster"}).c("item", data);
+    Prodromus.connection.sendIQ(iq);
+
+    var subscribe = $pres({to: data.jid, "type": "subscribe"});
+    Prodromus.connection.send(subscribe);
+
+    },
+
+    get_assistant_status: function()
+    {
+        iq = $iq({type: 'get'}).c('query', {xmlns: 'jabber:iq:roster'});
+        Prodromus.connection.sendIQ(iq, Prodromus.Checker.get_roster);
+    },
+
+    get_roster: function(iq)
+    {
+        $(iq).find('item').each(function()
+        {
+            var jid =  Prodromus.config.RECEIVER;
+        });
+        
+        Prodromus.connection.addHandler(Prodromus.Checker.on_presence, null, "presence");
+        Prodromus.connection.send($pres());
+    },
+
+    on_presence: function(presence)
+    {
+        var presence_type = $(presence).attr('type'); // unavailable, subscribed, etc...
+        var from = $(presence).attr('from'); // the jabber_id of the contact
+        var to = $(presence).attr('to');
+        var show = $(presence).find("show").text(); // this is what gives away, dnd, etc.
+        var status = $(presence).find("status").text();
+        // console.log(presence);
+        // console.log("presence_type : " + presence_type );
+        // console.log("Show: " + show );
+        // console.log("status : " + status );
+        // console.log("From: " + from );
+        // console.log("To: " + to);
+
+        if ( to !== undefined )
+        {
+            if (presence_type != 'error')
+            {
+                // Available
+                if ( (presence_type === undefined) && (show === '' || show === 'chat') )
+                {
+                    assistant_status = 1;
+                    return true;
+                }
+
+                // Not Available
+                if (presence_type === 'unavailable' || show === 'xa' || show === 'dnd' || 'away')
+                {
+                    assistant_status = 0;
+                    return true;
+                }
+            }
+            else
+            {
+                assistant_status = 2; // Server problem
+            }
+            return true;
+        }
+    },
+
+    freeze_controls: function(bool)
+    {
+        $('#prodromus-username').prop( "disabled", bool );
+        $('#prodromus-connect').prop( "disabled", bool );
+    }
+};
