@@ -17,23 +17,25 @@
     {% endfor %}
 {% endif %}
 
+<form role="form" method="post" action="/tokens">
+{% csrf_token %}
+  <div class="form-group col-lg-10">
+      <input name="comment" type="text" size="76" class="form-control" placeholder="Enter a comment(Optional)">
+  </div>
+  <div class="form-group">
+
+      <button name="create_token" type="submit" class="btn btn-default">Create Chat Token</button>
+</div>
+</form>
 <form method="post" action="/tokens">
 {% csrf_token %}
-  <table>
-    <tr>
-      <td>Comment (optional):</td>
-      <td><input name="comment" type="text" size="76" ></td>
-      <td><input name="create_token" type="submit" value="Create Chat Token"></td>
-    </tr>
-  </table>
-  <table>
+  <table  class="table table-hover">
     <tr>
       <td><b>Select</b></td>
       <td><b>Token URL</b></td>
       <td><b>Created on</b></td>
       <td><b>Expires on</b></td>
       <td><b>Comment</b></td>
-      <td><input name="revoke" type="submit"  value="Revoke Selected"></td>
     </tr>
  {% for token in tokens %}
     <tr>
@@ -44,11 +46,7 @@
       <td>{{token.comment}}</td>
     </tr>
  {% endfor %}
- <tr>
-   <td></td>
-   <td></td>
-   <td></td>
- </tr>
   </table>
+ <input name="revoke" type="submit" class="btn btn-default" value="Revoke Selected">
 </form>
 {% endblock content %}
