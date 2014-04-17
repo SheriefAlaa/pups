@@ -33,7 +33,6 @@
     <tr>
       <td><b>Select</b></td>
       <td><b>Token URL</b></td>
-      <td><b>Created on</b></td>
       <td><b>Expires on</b></td>
       <td><b>Comment</b></td>
     </tr>
@@ -41,7 +40,6 @@
     <tr>
       <td><input name="selected_list" type="checkbox" value="{{token.token}}"></td>
       <td>http://{{server}}/chat/{{token.token}}</td> <!-- Should be replaced with https and the correct domain -->
-      <td>{{token.created_at|date:"Y-m-d G:i"}}</td>
       <td>{{token.expires_at|date:"Y-m-d G:i"}}</td>
       <td>{{token.comment}}</td>
     </tr>
