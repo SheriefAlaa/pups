@@ -43,6 +43,7 @@
 */
 
 var assistant_status = null;
+var wait_counter = 0;
 
 $(document).ready( function() {
     Prodromus.UI.initialize( $( Prodromus.config.TARGET_ELEMENT ) );
@@ -50,12 +51,9 @@ $(document).ready( function() {
     Prodromus.connection = new Strophe.Connection( Prodromus.config.BOSH_SERVICE );
     
 
-    // Report status:
-    Prodromus.Checker.freeze_controls(true);
-    Prodromus.connection.connect( Prodromus.config.XMPP_SERVER, '');
-    setTimeout('Prodromus.Checker.subscribe();', 1000);
-    setTimeout('Prodromus.Checker.get_assistant_status();', 2000);
-    setTimeout('Prodromus.connection.disconnect(); Prodromus.Checker.freeze_controls(false);', 5000);
+    // Start checking if the support assistant is present and ready for chatting.
+    Prodromus.Checker.freeze_controls(true);    
+    Prodromus.connection.connect( Prodromus.config.XMPP_SERVER, '', get_status);
 
 
     // Uncomment the following lines to spy on the wire traffic.
@@ -428,15 +426,13 @@ Prodromus.Checker =
             jid: Prodromus.config.RECEIVER,
             name: Prodromus.config.RECEIVERNAME
         }
-    var iq = $iq({type: "set"}).c("query", {xmlns: "jabber:iq:roster"}).c("item", data);
-    Prodromus.connection.sendIQ(iq);
 
     var subscribe = $pres({to: data.jid, "type": "subscribe"});
     Prodromus.connection.send(subscribe);
 
     },
 
-    get_assistant_status: function()
+    get_pres: function()
     {
         iq = $iq({type: 'get'}).c('query', {xmlns: 'jabber:iq:roster'});
         Prodromus.connection.sendIQ(iq, Prodromus.Checker.get_roster);
@@ -444,11 +440,6 @@ Prodromus.Checker =
 
     get_roster: function(iq)
     {
-        $(iq).find('item').each(function()
-        {
-            var jid =  Prodromus.config.RECEIVER;
-        });
-        
         Prodromus.connection.addHandler(Prodromus.Checker.on_presence, null, "presence");
         Prodromus.connection.send($pres());
     },
@@ -460,12 +451,12 @@ Prodromus.Checker =
         var to = $(presence).attr('to');
         var show = $(presence).find("show").text(); // this is what gives away, dnd, etc.
         var status = $(presence).find("status").text();
-        // console.log(presence);
-        // console.log("presence_type : " + presence_type );
-        // console.log("Show: " + show );
-        // console.log("status : " + status );
-        // console.log("From: " + from );
-        // console.log("To: " + to);
+        console.log(presence);
+        console.log("presence_type : " + presence_type );
+        console.log("Show: " + show );
+        console.log("status : " + status );
+        console.log("From: " + from );
+        console.log("To: " + to);
 
         if ( to !== undefined )
         {
@@ -489,8 +480,8 @@ Prodromus.Checker =
             {
                 assistant_status = 2; // Server problem
             }
-            return true;
         }
+        return true;
     },
 
     freeze_controls: function(bool)
@@ -499,3 +490,38 @@ Prodromus.Checker =
         $('#prodromus-connect').prop( "disabled", bool );
     }
 };
+
+// Get current support assistant status
+function get_status(status) {
+    if (status === Strophe.Status.CONNECTED)
+    {
+        setTimeout('Prodromus.Checker.subscribe();', 1000);
+        setTimeout('Prodromus.Checker.get_pres();', 2000);
+        wait();
+    }
+
+    if (status === Strophe.Status.DISCONNECTED)
+    {
+        if (assistant_status == 1)
+            Prodromus.Checker.freeze_controls(false);
+
+        give_feedback();
+    }
+}
+
+// Do not dissconnect until assistant_status is populated.
+function wait()
+{
+    if (assistant_status == null)
+        setTimeout(wait, 500);
+    else
+        Prodromus.connection.disconnect();
+}
+
+function give_feedback()
+{
+    if (assistant_status == 1)
+        alert(Prodromus.config.RECEIVERNAME + "is available for chatting.");
+    else
+        alert(Prodromus.config.RECEIVERNAME + "is not available at the moment.");
+}
