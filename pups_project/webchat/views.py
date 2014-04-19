@@ -45,6 +45,8 @@ def revoke_token(request):
         messages.add_message(request, messages.INFO, fbm.empty_list)
         return redirect('/tokens')
 
+    # Revoke a token or more
+    token.revoke_token(request.POST.getlist("selected_list"))
     messages.add_message(request, messages.INFO, fbm.revoke_success)
     return redirect('/tokens')
 
