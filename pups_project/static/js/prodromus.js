@@ -42,8 +42,8 @@
 * 0 = unavailable/away/dnd/xa
 */
 
-var assistant_status = null;
-var wait_counter = 0;
+var isAvailable = null;
+var status_msg = null;
 
 $(document).ready( function() {
     Prodromus.UI.initialize( $( Prodromus.config.TARGET_ELEMENT ) );
@@ -450,11 +450,11 @@ Prodromus.PresenceReporter =
         var from = $(presence).attr('from'); // the jabber_id of the contact
         var to = $(presence).attr('to');
         var show = $(presence).find("show").text(); // this is what gives away, dnd, etc.
-        var status = $(presence).find("status").text();
+        msg = $(presence).find("status").text();
         // console.log(presence);
         // console.log("presence_type : " + presence_type );
         // console.log("Show: " + show );
-        // console.log("status : " + status );
+        // console.log("status : " + msg );
         // console.log("From: " + from );
         // console.log("To: " + to);
 
@@ -462,23 +462,27 @@ Prodromus.PresenceReporter =
         {
             if (presence_type != 'error')
             {
+                // Save status messge if it exists
+                if (msg !== null && msg !== '' && msg !== undefined)
+                    status_msg = msg;
+
                 // Available
                 if ( (presence_type === undefined) && (show === '' || show === 'chat') )
                 {
-                    assistant_status = 1;
+                    isAvailable = 1;
                     return true;
                 }
 
                 // Not Available
                 if (presence_type === 'unavailable' || show === 'xa' || show === 'dnd' || 'away')
                 {
-                    assistant_status = 0;
+                    isAvailable = 0;
                     return true;
                 }
             }
             else
             {
-                assistant_status = 2; // Server problem
+                isAvailable = 2; // Server problem
             }
         }
         return true;
@@ -495,24 +499,24 @@ Prodromus.PresenceReporter =
 function get_status(status) {
     if (status === Strophe.Status.CONNECTED)
     {
-        setTimeout('Prodromus.PresenceReporter.subscribe();', 1000);
-        setTimeout('Prodromus.PresenceReporter.get_pres();', 2000);
+        Prodromus.PresenceReporter.subscribe();
+        Prodromus.PresenceReporter.get_pres();
         wait();
     }
 
     if (status === Strophe.Status.DISCONNECTED)
     {
-        if (assistant_status == 1)
+        if (isAvailable == 1)
             Prodromus.PresenceReporter.freeze_controls(false);
 
         give_feedback();
     }
 }
 
-// Do not dissconnect until assistant_status is populated.
+// Do not dissconnect until isAvailable is populated.
 function wait()
 {
-    if (assistant_status == null)
+    if (isAvailable == null)
         setTimeout(wait, 500);
     else
         Prodromus.connection.disconnect();
@@ -520,8 +524,11 @@ function wait()
 
 function give_feedback()
 {
-    if (assistant_status == 1)
-        alert(Prodromus.config.RECEIVERNAME + " is available for chatting.");
-    else
-        alert(Prodromus.config.RECEIVERNAME + " is not available at the moment.");
+    if (isAvailable !== 1)
+    {
+        if (status_msg !== null)
+            alert(Prodromus.config.RECEIVERNAME + "'s status: " + status_msg);
+        else
+            alert(Prodromus.config.RECEIVERNAME + " is not available at the moment.");
+    }
 }
