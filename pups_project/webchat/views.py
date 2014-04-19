@@ -45,11 +45,6 @@ def revoke_token(request):
         messages.add_message(request, messages.INFO, fbm.empty_list)
         return redirect('/tokens')
 
-    # Delete tokens inside the list or redirect if can't access db.
-    if not token.revoke_token(request.POST.getlist("selected_list")):
-        messages.add_message(request, messages.INFO, fbm.db_error)
-        return redirect('/tokens')
-    
     messages.add_message(request, messages.INFO, fbm.revoke_success)
     return redirect('/tokens')
 
