@@ -417,19 +417,11 @@ Date.replaceChars = {
 
 
 Prodromus.PresenceReporter =
-
 {
     subscribe: function()
     {
-        data = 
-        {
-            jid: Prodromus.config.RECEIVER,
-            name: Prodromus.config.RECEIVERNAME
-        }
-
-    var subscribe = $pres({to: data.jid, "type": "subscribe"});
-    Prodromus.connection.send(subscribe);
-
+        var subscribe = $pres({to: Prodromus.config.RECEIVER, "type": "subscribe"});
+        Prodromus.connection.send(subscribe);
     },
 
     get_pres: function()
@@ -517,7 +509,7 @@ function get_status(status) {
 function wait()
 {
     if (isAvailable == null)
-        setTimeout(wait, 500);
+        setTimeout(wait, 250);
     else
         Prodromus.connection.disconnect();
 }
