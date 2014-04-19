@@ -52,7 +52,7 @@ $(document).ready( function() {
     
 
     // Start checking if the support assistant is present and ready for chatting.
-    Prodromus.Checker.freeze_controls(true);    
+    Prodromus.PresenceReporter.freeze_controls(true);    
     Prodromus.connection.connect( Prodromus.config.XMPP_SERVER, '', get_status);
 
 
@@ -299,7 +299,7 @@ Prodromus.UI = {
         pattern = pattern.replace( "{time}", Prodromus.i18n.getFormattedDate() );
         $( pattern ).appendTo( $('#prodromus-log') );
         
-        $("#prodromus-log").animate( { scrollTop: $("#prodromus-log").attr("scrollHeight") }, 1000 );
+        $("#prodromus-log").animate( { scrollTop: $("#prodromus-log").prop("scrollHeight") }, 1000 );
     }
 
 }
@@ -416,7 +416,7 @@ Date.replaceChars = {
 };
 
 
-Prodromus.Checker =
+Prodromus.PresenceReporter =
 
 {
     subscribe: function()
@@ -435,12 +435,12 @@ Prodromus.Checker =
     get_pres: function()
     {
         iq = $iq({type: 'get'}).c('query', {xmlns: 'jabber:iq:roster'});
-        Prodromus.connection.sendIQ(iq, Prodromus.Checker.get_roster);
+        Prodromus.connection.sendIQ(iq, Prodromus.PresenceReporter.get_roster);
     },
 
     get_roster: function(iq)
     {
-        Prodromus.connection.addHandler(Prodromus.Checker.on_presence, null, "presence");
+        Prodromus.connection.addHandler(Prodromus.PresenceReporter.on_presence, null, "presence");
         Prodromus.connection.send($pres());
     },
 
@@ -495,15 +495,15 @@ Prodromus.Checker =
 function get_status(status) {
     if (status === Strophe.Status.CONNECTED)
     {
-        setTimeout('Prodromus.Checker.subscribe();', 1000);
-        setTimeout('Prodromus.Checker.get_pres();', 2000);
+        setTimeout('Prodromus.PresenceReporter.subscribe();', 1000);
+        setTimeout('Prodromus.PresenceReporter.get_pres();', 2000);
         wait();
     }
 
     if (status === Strophe.Status.DISCONNECTED)
     {
         if (assistant_status == 1)
-            Prodromus.Checker.freeze_controls(false);
+            Prodromus.PresenceReporter.freeze_controls(false);
 
         give_feedback();
     }
@@ -521,7 +521,7 @@ function wait()
 function give_feedback()
 {
     if (assistant_status == 1)
-        alert(Prodromus.config.RECEIVERNAME + "is available for chatting.");
+        alert(Prodromus.config.RECEIVERNAME + " is available for chatting.");
     else
-        alert(Prodromus.config.RECEIVERNAME + "is not available at the moment.");
+        alert(Prodromus.config.RECEIVERNAME + " is not available at the moment.");
 }
