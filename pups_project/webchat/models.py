@@ -39,7 +39,7 @@ class Token(models.Model):
         '''
         Sets the expiration date equals to the creation date of a token or more
         '''
-        
+
         for token in token_list:
             Token.objects.filter(token = token).update(expires_at = F('created_at'))
 
@@ -49,4 +49,4 @@ class Token(models.Model):
         '''
         Returns a list of non-expired/revoked assistant's tokens
         '''
-        return Token.objects.filter(owner = assistant).order_by('-t_id').filter(expires_at__gt=F('created_at'))
+        return Token.objects.filter(owner = assistant).order_by('-t_id').filter(expires_at__gt = timezone.now())
