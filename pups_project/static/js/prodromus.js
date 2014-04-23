@@ -526,8 +526,8 @@ function wait()
 {
     if (isAvailable == null)
         setTimeout(wait, 250);
-
-    Prodromus.connection.disconnect();
+    else
+        Prodromus.connection.disconnect();
 }
 
 function give_feedback()
