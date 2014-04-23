@@ -272,7 +272,9 @@ Prodromus.UI = {
         var pattern = 
              '<div class="message message{type}">' 
                 +'<span class="msgText">{message}</span>'
-                +'<span class="msgPerson"><b>{person}</b><span class="msgTime">, {time}</span></span>'
+                +'<span class="msgPerson">'
+                +'<span style="color:green; font-weight:bold;">{person}</span>'
+                +'<span class="msgTime">, {time}</span></span>'
             +'</div>';
         
         switch( type ) {
