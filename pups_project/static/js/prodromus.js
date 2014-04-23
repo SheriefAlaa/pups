@@ -53,7 +53,7 @@ $(document).ready( function() {
 
     // Start checking if the support assistant is present and ready for chatting.
     Prodromus.PresenceReporter.freeze_controls(true);
-    Prodromus.PresenceReporter.progress_bar('20');
+    Prodromus.PresenceReporter.progress_bar(true, '20')
     Prodromus.connection.connect( Prodromus.config.XMPP_SERVER, '', get_status);
 
 
@@ -485,6 +485,11 @@ Prodromus.PresenceReporter =
     {
         $('#prodromus-username').prop( "disabled", bool );
         $('#prodromus-connect').prop( "disabled", bool );
+    },
+
+    progress_bar: function(bool, percent) 
+    {
+        $('.progress-bar').css('width', percent + '%');
 
         if (bool == true)
         {
@@ -492,11 +497,6 @@ Prodromus.PresenceReporter =
             return 0;
         }
         $('#progress-bar-container').hide();
-    },
-
-    progress_bar: function(percent) 
-    {
-        $('.progress-bar').css('width', percent + '%');
     }
 };
 
@@ -505,9 +505,9 @@ function get_status(status) {
     if (status === Strophe.Status.CONNECTED)
     {
         Prodromus.PresenceReporter.subscribe();
-        Prodromus.PresenceReporter.progress_bar('40');
+        Prodromus.PresenceReporter.progress_bar(true, '40');
         Prodromus.PresenceReporter.get_pres();
-        Prodromus.PresenceReporter.progress_bar('60');
+        Prodromus.PresenceReporter.progress_bar(true, '60');
         wait();
     }
 
@@ -516,7 +516,8 @@ function get_status(status) {
         if (isAvailable == 1)
             Prodromus.PresenceReporter.freeze_controls(false);
 
-        Prodromus.PresenceReporter.progress_bar('100');
+        Prodromus.PresenceReporter.progress_bar(true, '100');
+        Prodromus.PresenceReporter.progress_bar(false, '100');
         give_feedback();
     }
 }
