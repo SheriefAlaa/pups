@@ -268,7 +268,7 @@ Prodromus.UI = {
         $(el).html( pattern );
     },
     
-    log: function( msg, type, is_assistant = null ) {
+    log: function( msg, type ) {
         
         if (is_assistant)
 
