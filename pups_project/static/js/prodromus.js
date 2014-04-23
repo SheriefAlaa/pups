@@ -518,9 +518,15 @@ function give_feedback()
 {
     if (isAvailable !== 1)
     {
-        if (status_msg !== null)
-            alert(Prodromus.config.RECEIVERNAME + "'s status: " + status_msg);
+        if (status_msg !== null) 
+        {
+            $('feedback-status').html(Prodromus.config.RECEIVERNAME + "'s status: " + status_msg);
+            $('feedback-status').attr('display', 'block');
+        }
+
+            // alert(Prodromus.config.RECEIVERNAME + "'s status: " + status_msg);
         else
-            alert(Prodromus.config.RECEIVERNAME + " is not available at the moment.");
+            $('feedback-na').attr('display', 'block');
+            // alert(Prodromus.config.RECEIVERNAME + " is not available at the moment.");
     }
 }
