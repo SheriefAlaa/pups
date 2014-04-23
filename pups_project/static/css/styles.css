@@ -158,4 +158,6 @@ div#prodromus div#prodromus-messaging input#prodromus-sendmessage {
     display: none;
 }
 
-.tpo {width:25px; height:25px; padding-left:180px; padding-top:5px;}
+.tpo {padding-left:180px; padding-top:5px;}
+
+.tpo img {width:25px; height:25px;}
