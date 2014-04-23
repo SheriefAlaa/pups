@@ -537,6 +537,7 @@ function give_feedback()
         }
 
         $('#feedback-na').show();
+        return 0;
     }
     
     // Assistant is available and ready to chat, show chat window.
