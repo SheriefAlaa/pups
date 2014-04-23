@@ -256,8 +256,7 @@ Prodromus.UI = {
                 +'<form id="prodromus-msgform" action="">'
                     +'<textarea id="prodromus-message" rows="2" cols="52"></textarea>'
                     +'<input type="button" id="prodromus-sendmessage" value="{t9n_send}" />'
-                //    +'<div class="prodromus-clear"></div>'
-                    +'<div><span class="tpo"><img src="/static/images/tpo.jpg"</span></div>'
+                   +'<div class="prodromus-clear"></div>'
                 +'</form>'
             +'</div>';
         
