@@ -520,11 +520,11 @@ function give_feedback()
     {
         if (status_msg !== null) 
         {
-            $('feedback-status').html(Prodromus.config.RECEIVERNAME + "'s status: " + status_msg);
-            $('feedback-status').show();
+            $('#feedback-status').html(Prodromus.config.RECEIVERNAME + "'s status: " + status_msg);
+            $('#feedback-status').show();
             return 0;
         }
 
-        $('feedback-na').show();
+        $('#feedback-na').show();
     }
 }
