@@ -1,3 +1,8 @@
+body {
+    background-image: url('/static/images/webchat-background.png');
+    background-repeat:no-repeat;
+    background-position: right top;
+}
 div#prodromus {
     width: 420px;
     border: 1px solid #C9C9C9;
