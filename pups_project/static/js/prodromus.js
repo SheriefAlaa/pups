@@ -444,12 +444,6 @@ Prodromus.PresenceReporter =
         var to = $(presence).attr('to');
         var show = $(presence).find("show").text(); // this is what gives away, dnd, etc.
         msg = $(presence).find("status").text();
-        // console.log(presence);
-        // console.log("presence_type : " + presence_type );
-        // console.log("Show: " + show );
-        // console.log("status : " + msg );
-        // console.log("From: " + from );
-        // console.log("To: " + to);
 
         if ( to !== undefined )
         {
@@ -544,4 +538,7 @@ function give_feedback()
 
         $('#feedback-na').show();
     }
+    
+    // Assistant is available and ready to chat, show chat window.
+    $('#prodromus').show();
 }

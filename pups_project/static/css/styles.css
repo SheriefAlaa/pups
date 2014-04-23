@@ -16,6 +16,7 @@ div#prodromus {
     -webkit-border-radius: 5px;
     overflow: hidden;
     zoom: 1; /* uh, dirty ie6 hack... */
+    display: none;
 }
 
 div#prodromus div.prodromus-clear {
