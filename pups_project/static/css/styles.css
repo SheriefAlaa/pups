@@ -162,3 +162,16 @@ div#prodromus div#prodromus-messaging input#prodromus-sendmessage {
     text-align:center;
     display: none;
 }
+
+#progress-bar-container {
+  position: absolute;
+  top: 20px;
+  z-index: 1;
+  width: 300px;
+  height: 28px;
+  overflow: hidden;
+  background: #fff;
+  margin: 0 auto;
+  left:0;
+  right:100px;
+}
