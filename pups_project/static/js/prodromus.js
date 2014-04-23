@@ -268,19 +268,20 @@ Prodromus.UI = {
         $(el).html( pattern );
     },
     
-    log: function( msg, type ) {
+    log: function( msg, type, is_assistant = null ) {
+        
+        if (is_assistant)
+
         var pattern = 
              '<div class="message message{type}">' 
                 +'<span class="msgText">{message}</span>'
-                +'<span class="msgPerson">'
-                +'<span style="color:green; font-weight:bold;">{person}</span>'
-                +'<span class="msgTime">, {time}</span></span>'
+                +'<span class="msgPerson">{person}<span class="msgTime">, {time}</span></span>'
             +'</div>';
         
         switch( type ) {
             case 'msgIn':
                 pattern = pattern.replace( "{type}", "In" );
-                pattern = pattern.replace( "{person}", Prodromus.Util.htmlspecialchars( Prodromus.config.RECEIVERNAME ) );
+                pattern = pattern.replace( "{person}", '<span style="color:green; font-weight:bold;">' + Prodromus.Util.htmlspecialchars( Prodromus.config.RECEIVERNAME ) + '</span>');
                 break;
             case 'msgOut':
                 pattern = pattern.replace( "{type}", "Out" );
