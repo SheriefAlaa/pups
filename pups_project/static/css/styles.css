@@ -150,4 +150,12 @@ div#prodromus div#prodromus-messaging input#prodromus-sendmessage {
     margin: 7px 5px 0 0;
 }
 
+#feedback-status, #feedback-na {
+    width: 500px;
+    margin: auto;
+    margin-top: 15px;
+    text-align:center;
+    display: none;
+}
 
+.tpo {width:25px; height:25px; padding-left:180px; padding-top:5px;}
