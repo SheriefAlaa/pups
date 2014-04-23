@@ -269,9 +269,6 @@ Prodromus.UI = {
     },
     
     log: function( msg, type ) {
-        
-        if (is_assistant)
-
         var pattern = 
              '<div class="message message{type}">' 
                 +'<span class="msgText">{message}</span>'
