@@ -521,12 +521,10 @@ function give_feedback()
         if (status_msg !== null) 
         {
             $('feedback-status').html(Prodromus.config.RECEIVERNAME + "'s status: " + status_msg);
-            $('feedback-status').attr('display', 'block');
+            $('feedback-status').show();
+            return 0;
         }
 
-            // alert(Prodromus.config.RECEIVERNAME + "'s status: " + status_msg);
-        else
-            $('feedback-na').attr('display', 'block');
-            // alert(Prodromus.config.RECEIVERNAME + " is not available at the moment.");
+        $('feedback-na').show();
     }
 }
