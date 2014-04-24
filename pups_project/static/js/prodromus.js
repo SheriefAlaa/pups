@@ -50,11 +50,8 @@ $(document).ready( function() {
     
     Prodromus.connection = new Strophe.Connection( Prodromus.config.BOSH_SERVICE );
     
-
     // Start checking if the support assistant is present and ready for chatting.
-    Prodromus.PresenceReporter.freeze_controls(true);
-    Prodromus.PresenceReporter.progress_bar(true, '20')
-    Prodromus.connection.connect( Prodromus.config.XMPP_SERVER, '', get_status);
+    Prodromus.connection.connect( Prodromus.config.XMPP_SERVER, '', getStatus);
 
 
     // Uncomment the following lines to spy on the wire traffic.
@@ -423,21 +420,18 @@ Prodromus.PresenceReporter =
     {
         var subscribe = $pres({to: Prodromus.config.RECEIVER, "type": "subscribe"});
         Prodromus.connection.send(subscribe);
-    },
 
-    get_pres: function()
-    {
         iq = $iq({type: 'get'}).c('query', {xmlns: 'jabber:iq:roster'});
-        Prodromus.connection.sendIQ(iq, Prodromus.PresenceReporter.get_roster);
+        Prodromus.connection.sendIQ(iq, Prodromus.PresenceReporter.getPresence);
     },
 
-    get_roster: function(iq)
+    getPresence: function(iq)
     {
-        Prodromus.connection.addHandler(Prodromus.PresenceReporter.on_presence, null, "presence");
+        Prodromus.connection.addHandler(Prodromus.PresenceReporter.onPresence, null, "presence");
         Prodromus.connection.send($pres());
     },
 
-    on_presence: function(presence)
+    onPresence: function(presence)
     {
         var presence_type = $(presence).attr('type'); // unavailable, subscribed, etc...
         var from = $(presence).attr('from'); // the jabber_id of the contact
@@ -475,13 +469,34 @@ Prodromus.PresenceReporter =
         return true;
     },
 
-    freeze_controls: function(bool)
+    waitForFeedback: function()
     {
-        $('#prodromus-username').prop( "disabled", bool );
-        $('#prodromus-connect').prop( "disabled", bool );
+        // Do not dissconnect until isAvailable is populated.
+        if (isAvailable == null)
+            setTimeout(wait, 250);
+        else
+            Prodromus.connection.disconnect();
     },
 
-    progress_bar: function(bool, percent) 
+    giveFeedback: function()
+    {
+        if (isAvailable !== 1)
+        {
+            if (status_msg !== null) 
+            {
+                $('#feedback-status').html(Prodromus.config.RECEIVERNAME + "'s status: " + status_msg);
+                $('#feedback-status').show();
+                return 0;
+            }
+
+            $('#feedback-na').show();
+            return 0;
+        }
+        // Assistant is available and ready to chat, show chat window.
+        $('#prodromus').show();
+    },
+    
+    progressBar: function(bool, percent) 
     {
         $('.progress-bar').css('width', percent + '%');
 
@@ -495,51 +510,32 @@ Prodromus.PresenceReporter =
 };
 
 // Get current support assistant status
-function get_status(status) {
+function getStatus(status) 
+{
+    if (status === Strophe.Status.CONNECTING)
+    {
+        Prodromus.PresenceReporter.progressBar(true, '20');
+    }
+
+    if (status === Strophe.Status.CONNFAIL) 
+    {
+        Prodromus.PresenceReporter.progressBar(false, '0');
+        $("#feedback-connfailed").show();
+        return 0;
+    }
+
     if (status === Strophe.Status.CONNECTED)
     {
+        Prodromus.PresenceReporter.progressBar(true, '30');
         Prodromus.PresenceReporter.subscribe();
-        Prodromus.PresenceReporter.progress_bar(true, '40');
-        Prodromus.PresenceReporter.get_pres();
-        Prodromus.PresenceReporter.progress_bar(true, '60');
-        wait();
+        Prodromus.PresenceReporter.progressBar(true, '60');
+        Prodromus.PresenceReporter.waitForFeedback();
     }
 
     if (status === Strophe.Status.DISCONNECTED)
     {
-        if (isAvailable == 1)
-            Prodromus.PresenceReporter.freeze_controls(false);
-
-        Prodromus.PresenceReporter.progress_bar(true, '100');
-        Prodromus.PresenceReporter.progress_bar(false, '100');
-        give_feedback();
+        Prodromus.PresenceReporter.progressBar(true, '100');
+        Prodromus.PresenceReporter.progressBar(false, '100');
+        Prodromus.PresenceReporter.giveFeedback();
     }
-}
-
-// Do not dissconnect until isAvailable is populated.
-function wait()
-{
-    if (isAvailable == null)
-        setTimeout(wait, 250);
-    else
-        Prodromus.connection.disconnect();
-}
-
-function give_feedback()
-{
-    if (isAvailable !== 1)
-    {
-        if (status_msg !== null) 
-        {
-            $('#feedback-status').html(Prodromus.config.RECEIVERNAME + "'s status: " + status_msg);
-            $('#feedback-status').show();
-            return 0;
-        }
-
-        $('#feedback-na').show();
-        return 0;
-    }
-    
-    // Assistant is available and ready to chat, show chat window.
-    $('#prodromus').show();
 }

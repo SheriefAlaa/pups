@@ -156,7 +156,7 @@ div#prodromus div#prodromus-messaging input#prodromus-sendmessage {
     margin: 7px 5px 0 0;
 }
 
-#feedback-status, #feedback-na {
+#feedback-status, #feedback-na, #feedback-connfailed {
     width: 500px;
     margin: auto;
     margin-top: 15px;
