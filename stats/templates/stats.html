@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Pups - Stats{% endblock title %}
+
+{% block extra_css %}
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-theme.min.css">
+
+   <style type="text/css">
+
+    input[type=text] {
+      width: 600px;
+      display: inline-block; 
+    }
+
+    input[type=text][name=counter]{
+      width: 60px;  
+    }    
+
+    </style>
+{% endblock extra_css %}
+{% block script %}
+  <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/stats.js"></script>
+{% endblock script %}
+
+{% block content %}
+{% include "nav_bar.html" %}
+    <div id="newq">
+      <input id="newqtext" class="form-control" placeholder="Give me some text" type="text" style="display: inline-block;">
+      <input id="savenewq" class="btn btn-default" type="button" value="Save">
+    </div>
+  <div id="questions"></div>
+{% endblock content %}

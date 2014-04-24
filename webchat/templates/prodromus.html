@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Prodromus XMPP client</title>
+        <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+        <script type="text/javascript" src="/static/js/strophe.min.js"></script>
+
+        <script type="text/javascript">
+
+            var Prodromus = {
+                // version constant
+                VERSION: '0.2',
+                
+                // initialize connection property
+                connection: null
+            }
+
+            Prodromus.config = {
+                
+                // ID of element (with prepended #), DOM element
+                // or jQuery object of the element which should 
+                // get used for the PRODROMUS client
+                'TARGET_ELEMENT': '#prodromus',
+                
+                // XMPP server to connect to (should be accessible via BOSH service).
+                // Authentication gets done via SASL ANONYMOUS, so you should use a 
+                // server which supports that authentication type.
+                'XMPP_SERVER': "{{server}}",
+
+                // BOSH service (should be absolute or relative path). This might be a
+                // tricky part due to the JavaScript same origin policy. The easiest
+                // way is to setup a reverse proxy under Apache. This only requires 
+                // mod_proxy, mod_rewrite and a .htaccess file similar to the example
+                // supplied with PRODROMUS.
+                'BOSH_SERVICE': "{{bosh}}",
+                
+                // JID of receiver
+                'RECEIVER': "{{receiver}}",
+                
+                // name of receiver
+                'RECEIVERNAME': "{{receiver_name}}",
+                
+                // leave this empty or fill in a default name
+                'SENDERNAME': '',
+                
+                // date format, syntax like php's date function
+                // (for US something like 'm-d-Y H:i:s', Germany like 'd.m.Y H:i:s')
+                'DATEFORMAT': 'm-d-Y H:i:s',
+                
+                // language, currently supported: 'de' and 'en'
+                'LANGUAGE': 'en',
+                
+                // stores the token of this session
+                'TOKEN': '{{token}}'
+            }
+
+        </script>
+
+        <script type="text/javascript" src="/static/js/prodromus.js" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" media="screen" href="/static/css/styles.css" />
+        <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-theme.min.css">
+    </head>
+    <body>
+        <div id="feedback-na" class="alert alert-warning">
+            {{receiver_name}} is not available for chatting right now
+        </div>
+        <div id="feedback-status" class="alert alert-info"></div>
+        <div id="feedback-connfailed" class="alert alert-danger">Server error, please contact help@rt.torproject.org</div>
+        <div id="progress-bar-container" class="progress progress-striped active">
+            <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+        </div>
+        <div id="prodromus"></div>
+    </body>
+</html>
