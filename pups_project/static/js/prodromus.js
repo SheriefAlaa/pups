@@ -541,12 +541,3 @@ function getStatus(status)
             Prodromus.PresenceReporter.giveFeedback();
     }
 }
-
-function waitForFeedback()
-{
-    // Do not dissconnect until isAvailable is populated.
-    if (isAvailable == null)
-        setTimeout(waitForFeedback, 250);
-    else
-        Prodromus.connection.disconnect();
-}
