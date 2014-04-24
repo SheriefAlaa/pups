@@ -13,7 +13,7 @@ ADMINS = (
 MANAGERS = ADMINS
 
 LOGIN_URL = '/login'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/home'
 
 # Removes trailing slash in urls
 APPEND_SLASH = False
