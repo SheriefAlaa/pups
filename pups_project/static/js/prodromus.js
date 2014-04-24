@@ -44,6 +44,7 @@
 
 var isAvailable = null;
 var status_msg = null;
+var connfail = false;
 
 $(document).ready( function() {
     Prodromus.UI.initialize( $( Prodromus.config.TARGET_ELEMENT ) );
@@ -477,7 +478,7 @@ Prodromus.PresenceReporter =
         else
             Prodromus.connection.disconnect();
     },
-    
+
     giveFeedback: function()
     {
         if (isAvailable !== 1)
@@ -521,7 +522,7 @@ function getStatus(status)
     {
         Prodromus.PresenceReporter.progressBar(false, '0');
         $("#feedback-connfailed").show();
-        return 0;
+        connfail = true; // return doesn't work on callbacks so used a variable
     }
 
     if (status === Strophe.Status.CONNECTED)
@@ -536,7 +537,8 @@ function getStatus(status)
     {
         Prodromus.PresenceReporter.progressBar(true, '100');
         Prodromus.PresenceReporter.progressBar(false, '100');
-        Prodromus.PresenceReporter.giveFeedback();
+        if (connfail !== true)
+            Prodromus.PresenceReporter.giveFeedback();
     }
 }
 
