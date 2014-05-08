@@ -1,5 +1,5 @@
-from django.core.management.base import BaseCommand, CommandError
 import sys
+from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
@@ -16,5 +16,7 @@ class Command(BaseCommand):
             user = User.objects.get(username = args[0])
             user.delete()
             print "Deleted: %s" % args[0]
+            sys.exit(1)
         except ObjectDoesNotExist:
             print '"%s" does not exist in the database.' % (args[0])
+            sys.exit(-1)
