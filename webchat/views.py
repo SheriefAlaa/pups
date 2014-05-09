@@ -17,7 +17,7 @@ def tokens_page(request):
 
     # Revoke one or more tokens
     if 'revoke' in request.POST:
-        return revoke_token(request)
+        return revoke_tokens(request)
 
     params = {
         'name' : request.user.username,
@@ -37,7 +37,7 @@ def create_token(request):
     messages.add_message(request, messages.INFO, fbm.token_created)
     return redirect('/tokens')
 
-def revoke_token(request):
+def revoke_tokens(request):
     token = Token()
 
     # If nothing was selected redirect and complain
@@ -46,7 +46,7 @@ def revoke_token(request):
         return redirect('/tokens')
 
     # Revoke a token or more
-    token.revoke_token(request.POST.getlist("selected_list"))
+    token.revoke_tokens(request.POST.getlist("selected_list"))
     messages.add_message(request, messages.INFO, fbm.revoke_success)
     return redirect('/tokens')
 

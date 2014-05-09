@@ -35,7 +35,7 @@ class Token(models.Model):
         except ObjectDoesNotExist:
             return []
 
-    def revoke_token(self, token_list):
+    def revoke_tokens(self, token_list):
         '''
         Sets the expiration date equals to the creation date of a token or more
         '''
