@@ -36,14 +36,12 @@
  * @license Affero General Public License
  */
 
-/*
-* 2 = Something is really wrong with the server
-* 1 = available/chat
-* 0 = unavailable/away/dnd/xa
-*/
+_assistantNotAvailable = 0
+_assistantAvailable = 1
+_serverError = 2
 
-var isAvailable = null;
-var status_msg = null;
+var assisantStatus;
+var status_msg;
 var connfail = false;
 
 $(document).ready( function() {
@@ -218,7 +216,7 @@ Prodromus.actionhandler = {
                 Prodromus.connection.send( $pres() );
 
                 Prodromus.buildAndSendMessage(
-                    Prodromus.Util.htmlspecialchars( Prodromus.config.SENDERNAME ) + Prodromus.i18n.t9n( 'msg-hello' ) + " Token: " + Prodromus.config.TOKEN
+                    Prodromus.Util.htmlspecialchars( Prodromus.config.SENDERNAME ) + Prodromus.i18n.t9n( 'msg-hello' ) + Prodromus.i18n.t9n( 'token' )
                   , 'chat' 
                 );
                 break;
@@ -342,7 +340,8 @@ Prodromus.t9n = {
         'send': 'Send',
         'failed-to-connect': 'Failed to connect to the server!',
         'msg-hello': ' joins the chat.',
-        'msg-goodbye': ' leaves the chat. '
+        'msg-goodbye': ' leaves the chat. ',
+        'token': " Token: " + Prodromus.config.TOKEN
     }
 
 }
@@ -451,20 +450,20 @@ Prodromus.PresenceReporter =
                 // Available
                 if ( (presence_type === undefined) && (show === '' || show === 'chat') )
                 {
-                    isAvailable = 1;
+                    assisantStatus = _assistantAvailable;
                     return true;
                 }
 
                 // Not Available
                 if (presence_type === 'unavailable' || show === 'xa' || show === 'dnd' || 'away')
                 {
-                    isAvailable = 0;
+                    assisantStatus = _assistantNotAvailable;
                     return true;
                 }
             }
             else
             {
-                isAvailable = 2; // Server problem
+                assisantStatus = _serverError;
             }
         }
         return true;
@@ -472,8 +471,8 @@ Prodromus.PresenceReporter =
 
     waitForFeedback: function()
     {
-        // Do not dissconnect until isAvailable is populated.
-        if (isAvailable == null)
+        // Do not dissconnect until assisantStatus is populated.
+        if (assisantStatus === undefined)
             setTimeout(Prodromus.PresenceReporter.waitForFeedback, 250);
         else
             Prodromus.connection.disconnect();
@@ -481,9 +480,9 @@ Prodromus.PresenceReporter =
 
     giveFeedback: function()
     {
-        if (isAvailable !== 1)
+        if (assisantStatus !== _assistantAvailable)
         {
-            if (status_msg !== null) 
+            if (status_msg !== undefined) 
             {
                 $('#feedback-status').html(Prodromus.config.RECEIVERNAME + "'s status: " + status_msg);
                 $('#feedback-status').show();
