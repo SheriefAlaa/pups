@@ -2,8 +2,8 @@
 import os
 PROJECT_PATH = os.path.dirname(os.path.realpath(__file__))
 
-DEBUG = True
-#DEBUG = False
+#DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -13,19 +13,19 @@ ADMINS = (
 MANAGERS = ADMINS
 
 LOGIN_URL = '/login'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/home'
 
 # Removes trailing slash in urls
-APPEND_SLASH=False
+APPEND_SLASH = False
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': os.path.abspath(os.path.join(os.path.dirname( __file__ ),  'databases/pups.db')),  # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(PROJECT_PATH, 'databases/pups.db'),
+        'USER': '',  # The rest of the elements are not used with sqlite3
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
     }
 }
 
@@ -53,7 +53,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    # This is only for the dev server. In a real environment apache will take over.
+    # Only for the dev server. In a real environment apache will take over.
     os.path.join(PROJECT_PATH, '..', 'static'),
 )
 
@@ -85,7 +85,7 @@ ROOT_URLCONF = 'pups.urls'
 WSGI_APPLICATION = 'pups.wsgi.application'
 
 TEMPLATE_DIRS = (
-    os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'templates/')),
+    os.path.join(PROJECT_PATH, 'templates/'),
 )
 
 INSTALLED_APPS = (
@@ -101,20 +101,20 @@ INSTALLED_APPS = (
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
-"django.contrib.auth.context_processors.auth",
-"django.core.context_processors.debug",
-"django.core.context_processors.i18n",
-"django.core.context_processors.media",
-"django.core.context_processors.static",
-"django.core.context_processors.tz",
-"django.contrib.messages.context_processors.messages",
-"django.core.context_processors.request"
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
+    "django.core.context_processors.request"
 )
 
-# pups custom configuration 
+# pups custom configuration
 CONFIG = {
-    'server' : 'localhost:8000',# eg: 188.226.179.216
-    'bosh' : 'http://188.226.179.216/http-bind', # eg: http://188.226.179.216/http-bind
-    'receiver' : '@localhost', # XMPP support assistant address eg: @localhost or @whatever.lit
-    'expiration_days' : 3
+    'server': 'localhost:8000',  # IP or domain name
+    'bosh': 'http://188.226.179.216/http-bind',  # http://example.com/http-bind
+    'receiver': '@localhost',  # @example.lit
+    'expiration_days': 3  # Token expiration days
 }

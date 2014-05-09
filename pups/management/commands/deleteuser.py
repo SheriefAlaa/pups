@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 
+
 class Command(BaseCommand):
     help = 'Deletes a support assistant account'
 
@@ -13,7 +14,7 @@ class Command(BaseCommand):
             sys.exit(0)
 
         try:
-            user = User.objects.get(username = args[0])
+            user = User.objects.get(username=args[0])
             user.delete()
             print "Deleted: %s" % args[0]
             sys.exit(1)

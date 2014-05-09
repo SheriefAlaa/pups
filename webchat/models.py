@@ -8,10 +8,10 @@ from django.db.models import F
 
 
 class Token(models.Model):
-    t_id  = models.AutoField(primary_key=True)
+    t_id = models.AutoField(primary_key=True)
     owner = models.ForeignKey(User)
     token = models.CharField(max_length=64)
-    created_at = models.DateTimeField(auto_now_add = True)
+    created_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField()
     comment = models.CharField(max_length=128)
 
@@ -20,18 +20,18 @@ class Token(models.Model):
 
     def create_token(self, owner_id, expiration_days, comment):
         q = Token(
-                    owner = User.objects.get(id = owner_id),
-                    token = uuid.uuid4().hex,
-                    expires_at = timezone.now() + timedelta(expiration_days),
-                    comment = comment
-                    )
+            owner=User.objects.get(id=owner_id),
+            token=uuid.uuid4().hex,
+            expires_at=timezone.now() + timedelta(expiration_days),
+            comment=comment
+            )
         q.save()
 
         return q.t_id is not None
 
     def get_token(self, token):
         try:
-           return Token.objects.get(token = token)
+            return Token.objects.get(token=token)
         except ObjectDoesNotExist:
             return []
 
@@ -41,12 +41,13 @@ class Token(models.Model):
         '''
 
         for token in token_list:
-            Token.objects.filter(token = token).update(expires_at = F('created_at'))
-
-        return True 
+            Token.objects.filter(token=token)\
+                .update(expires_at=F('created_at'))
+        return True
 
     def get_assistant_tokens(self, assistant):
         '''
         Returns a list of non-expired/revoked assistant's tokens
         '''
-        return Token.objects.filter(owner = assistant).order_by('-t_id').filter(expires_at__gt = timezone.now())
+        return Token.objects.filter(owner=assistant).order_by('-t_id')\
+            .filter(expires_at__gt=timezone.now())

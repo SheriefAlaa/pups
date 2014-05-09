@@ -2,22 +2,22 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
 
-	# Serves static files
+    # Serves static files
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve',
-    {'document_root': settings.STATIC_ROOT}),
+        {'document_root': settings.STATIC_ROOT}),
 
     # Handles login and logout
     url(r'^login$', 'pups.views.custom_login'),
     url(r'^logout$', 'django.contrib.auth.views.logout_then_login'),
-    url(r'^chpass$', 'pups.views.change_password'), 
+    url(r'^chpass$', 'pups.views.change_password'),
 
     # Pups views
-
-    url(r'^home$', 'pups.views.home'), 
+    url(r'^home$', 'pups.views.home'),
 
     # Apps urls
     url(r'', include('webchat.urls', 'webchat')),
     url(r'', include('stats.urls', 'stats')),
-) 
+)
