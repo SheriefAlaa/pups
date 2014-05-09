@@ -19,6 +19,7 @@ How to install:
 ===============
 
 * git clone https://github.com/SheriefAlaa/projectpups.git
+* cp projectpups/pups/settings.py.sample projectpups/pups/settings.py
 * python manage.py syncdb (Would you like to create one now? (yes/no): no)
 * chown -R www-data:www-data databases/ 
 * chmod -R 770 databases/
@@ -54,13 +55,10 @@ Alias /static/ /home/user/path/to/static/
 
 Possible extensions:
 ===============
-* Resize the chat window on visiting the link?
-* Give the support assistant the ability to send a notification email (eg: I am available for chatting for the next X hours).
+* Resize the chat window on visiting the link.
+* Give the support assistant the ability to send a notification email.
+* When will the assistant be available count down timer.
 * Localization.
-
-License:
-========
-Do whatever you want with this application, just point to the original git repo.
 
 Contact:
 ========
