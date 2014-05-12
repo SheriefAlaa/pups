@@ -1,7 +1,7 @@
 Overview:
 =========
 
-pups_project contains small projects that helps the support teams.
+Pups is a Django/Python Project that contains small apps that helps the support teams.
 
 * pups: The main Django app that handles login/logout/registration
 * webchat: Extends Prodromus (An XMPP javascript client) to support invitation based chat tokens.

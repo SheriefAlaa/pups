@@ -3,7 +3,8 @@
  * mainly reasonable as contact form replacement/supplement or 
  * support contact utility."
  * 
- * (c) 2009-10 by Raphael Kallensee, http://raphael.kallensee.name
+ * Original Author: (c) 2009-10 by Raphael Kallensee, http://raphael.kallensee.name
+ * Extended by: (c) 2014 - Sherief Alaa <sheriefalaa.w at gmail dot com>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -25,7 +26,7 @@
  * function is used which is available under the MIT license.
  *
  * jQuery: http://jquery.com 
- * Strophe.js: http://code.stanziq.com/strophe/
+ * Strophe.js: http://strophe.im/strophejs/
  */
 
 /**
