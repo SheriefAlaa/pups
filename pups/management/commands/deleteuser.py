@@ -4,8 +4,8 @@
 #  Author: Sherief Alaa <sheriefalaa.w@gmail.com>
 #
 #  Copyright:
-#   © 2014 Sherief Alaa.
-#   © 2014 The Tor Project, Inc.
+#   (c) 2014 Sherief Alaa.
+#   (c) 2014 The Tor Project, Inc.
 #
 # Pups is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
