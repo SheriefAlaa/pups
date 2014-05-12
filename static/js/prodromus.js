@@ -3,8 +3,13 @@
  * mainly reasonable as contact form replacement/supplement or 
  * support contact utility."
  * 
- * Original Author: (c) 2009-10 by Raphael Kallensee, http://raphael.kallensee.name
- * Extended by: (c) 2014 - Sherief Alaa <sheriefalaa.w at gmail dot com>
+ * Copyright:
+ *  (c) 2009-10 by Raphael Kallensee, http://raphael.kallensee.name
+ *  (c) 2014 Sherief Alaa <sheriefalaa.w@gmail.com>
+ * 
+ * Authors: 
+ *  Raphael Kallensee, http://raphael.kallensee.name
+ *  Sherief Alaa <sheriefalaa.w@gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
