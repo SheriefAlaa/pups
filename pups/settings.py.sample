@@ -1,31 +1,9 @@
-# This file is part of Pups, a django/python project which contains
-# web support tools
-#
-#  Author: Sherief Alaa <sheriefalaa.w@gmail.com>
-#
-#  Copyright:
-#   (c) 2014 Sherief Alaa.
-#   (c) 2014 The Tor Project, Inc.
-#
-# Pups is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Pups is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Pups.  If not, see <http://www.gnu.org/licenses/>.
-
 # Django settings for pups project.
 import os
 PROJECT_PATH = os.path.dirname(os.path.realpath(__file__))
 
-#DEBUG = True
-DEBUG = False
+DEBUG = True
+#DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -135,8 +113,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 # pups custom configuration
 CONFIG = {
-    'server': 'localhost:8000',  # IP or domain name
-    'bosh': 'http://188.226.179.216/http-bind',  # http://example.com/http-bind
-    'receiver': '@localhost',  # @example.lit
+    'url':  'support.example.com'  # URL that will be displayed in /token
+    'server': '',  # xmpp server
+    'bosh': '',  # http://example.com/http-bind
+    'receiver': '',  # @example.lit
     'expiration_days': 3  # Token expiration days
 }

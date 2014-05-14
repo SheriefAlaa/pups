@@ -46,7 +46,7 @@ def tokens_page(request):
         'name': request.user.username,
         'tokens': token.get_assistant_tokens(
             User.objects.get(id=request.user.id)),
-        'server': settings.CONFIG['server']
+        'url': settings.CONFIG['url']
     }
     # View all tokens owned by logged in assistant
     return render(request, 'tokens.html', params)
