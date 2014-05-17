@@ -25,5 +25,13 @@ from django.conf.urls import patterns, url
 
 urlpatterns = patterns(
     '',
-    url(r'^stats$', 'stats.views.stats')
+    url(r'^stats$', 'stats.views.stats_page'),
+    url(r'^create_issue$', 'stats.views.create_issue'),
+    url(r'^delete_issue$', 'stats.views.delete_issue_ajax'),
+    url(r'^edit_issue$', 'stats.views.edit_issue_ajax'),
+    url(r'^save_issue_edit$', 'stats.views.save_issue_edit_ajax'),
+    url(r'^unlock_issue$', 'stats.views.unlock_issue_ajax'),
+    url(r'^plus_one$', 'stats.views.plus_one_ajax'),
+    url(r'^stats_data_ajax$', 'stats.views.stats_data_ajax'),
+    
 )
