@@ -3,7 +3,7 @@ input[type=text] {
     display: inline-block; 
 }
 
-input[type=text][name=counter]{
+input[type=text][name=plus_one]{
     width: 50px;  
 }  
 
@@ -20,4 +20,23 @@ input[type=text][name=counter]{
     width: 25%;
     float: right;
     margin-right: -25px;
+}
+
+.readMore {
+	color:blue;
+	font-size:80%;
+}
+
+.readLess {
+    color:blue;
+    font-size:80%;
+}
+
+div[name="issue_text"] {
+    word-wrap: break-word;
+}
+
+#alert-text, #lock_limit, #alert-server-unreachable-text {
+    word-wrap:break-word;
+    padding: 5px 0px 0px 10px;
 }

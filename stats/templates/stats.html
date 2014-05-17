@@ -15,31 +15,66 @@
 
 {% block content %}
 {% include "nav_bar.html" %}
-    <div id="newq">
-      <input id="new_issue_text" class="form-control" placeholder="Warning: This is not ready yet!" type="text" style="display: inline-block;">
-      <input id="save_issue" class="btn btn-default" type="button" value="Save">
-    </div>
 
-<div id="issues"></div>
+<form role="form" method="post" action="/create_issue">
+{% csrf_token %}
+    <input id="new_issue_text" name="new_issue_text" class="form-control" placeholder="Give me some text..." type="text" style="display: inline-block;">
+    <button id="save_issue" class="btn btn-default" type="submit">Save</button>
+  <div id="newq">
+  </div>
+</form>
 
-  <!-- Issue Edit Modal -->
-  <div class="modal fade" id="EditIssue" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title" id="myModalLabel">Edit issue</h4>
-        </div>
-        <div class="modal-body">
-          <textarea id="edit_text" rows="8" cols="65"></textarea>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal" id="close_edit">Close</button>
-          <button type="button" class="btn btn-primary" id="save_edit">Save changes</button>
-        </div>
+<div id="issues">
+</div>
+
+<!-- Issue Edit Modal -->
+<div class="modal fade" id="EditIssue" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Edit issue</h4>
+      </div>
+      <div class="modal-body">
+        <textarea id="edit_text" rows="8" cols="65"></textarea>
+      </div>
+      <div id="lock_limit"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="close_edit">Close</button>
+        <button type="button" class="btn btn-primary" id="save_edit">Save changes</button>
       </div>
     </div>
   </div>
+</div>
+
+<!-- Alert Modal -->
+<div class="modal fade" id="Alert" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="AlertLable"></h4>
+      </div>
+      <div class="alert-body" id="alert-text"></div>
+      <div class="modal-footer">
+        <button id="alert-ok" type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Server unreachable Modal -->
+<div class="modal fade" id="alert-server-unreachable" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="AlertLable"></h4>
+      </div>
+      <div class="alert-body" id="alert-server-unreachable-text"></div>
+      <div class="modal-footer">
+        <button id="reconnect" type="button" class="btn btn-default" data-dismiss="modal">Reconnect</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% include "footer.html" %}
 {% endblock content %}
