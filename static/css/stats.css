@@ -1,0 +1,23 @@
+input[type=text] {
+    width: 900px;
+    display: inline-block; 
+}
+
+input[type=text][name=counter]{
+    width: 50px;  
+}  
+
+.clear {
+    margin: 5px;
+}
+
+.issue_text {
+    width: 75%;
+    float: left;
+}
+
+.options {
+    width: 25%;
+    float: right;
+    margin-right: -25px;
+}

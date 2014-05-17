@@ -1,76 +1,106 @@
+// This file is part of Pups, a django/python project which contains
+// web support tools
+//
+//  Author: Sherief Alaa <sheriefalaa.w@gmail.com>
+//
+//  Copyright:
+//   (c) 2014 Sherief Alaa.
+//   (c) 2014 The Tor Project, Inc.
+//
+// Pups is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Pups is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Pups.  If not, see <http://www.gnu.org/licenses/>.
+
+var current_issue_edit_id;
+
 $(document).ready (function (){
 
-  // New question event listener
-  $("#savenewq").click(function() {
+  $("#save_issue").click(function() {
 
-
-    if ($("#newqtext").val() == '') {
+    if ($("#new_issue_text").val() == '') {
       alert ('Please enter something');
       return false;
     }
 
-    var uid = generateUUID();
-    var quid =  "'" + uid + "'"; // Wrapped in quotes to make things cleaner.
+    NewIssue();
+  });
 
-    // Send question text to sqlite
+  $("#save_edit").click(function() {
 
-    // Create a new question
-    $("#questions").append('<div id="id-' + uid + '"></div>');
+    SaveEdit(current_issue_edit_id);
+  });
 
-    $("#id-"+uid).append('<input id="qtext-' + uid + '" class="form-control" name="qtext" type="text" value="'+ $("#newqtext").val() +'" readonly>');
-    $("#id-"+uid).append('<input id="qtextedit-'+ uid +'" class="form-control" style="display:none;" type="text" size="85" value="">');
-    $("#id-"+uid).append('<input id="save-'+ uid +'" style="display:none;" class="btn btn-danger" type="button" value="Save" onClick="saveEdit('+quid+');">');
-    $("#id-"+uid).append('<input id="cancel-'+ uid +'" style="display:none;" class="btn btn-default" type="button" value="Cancel"onClick="cancelEdit('+quid+');">');
-    $("#id-"+uid).append('<input id="counter-' + uid + '" class="form-control" name="counter" type="text" size="4" value="" readonly>');
-    $("#id-"+uid).append('<input id="plus-' + uid + '" class="btn btn-default" type="button" value="+1" onClick="counter('+quid+');">');
-    $("#id-"+uid).append('<input id="edit-' + uid + '" class="btn btn-default" type="button" value="Edit" style="display:inline-block" onClick="editq('+quid+');" >');
-    $("#id-"+uid).append('<input id="del-' + uid + '" class="btn btn-danger" type="button" value="Delete" onClick="deleteq('+quid+');">');
+  $("#close_edit").click(function() {
 
-
-    // Clear question to avoid replication by mistake.
-    $("#newqtext").val("");
+    CancelEdit(current_issue_edit_id);
   });
 
 });
 
-// Edit a question
-function editq(uid) {
-  $('#qtext-' + uid).hide();
-  $('#qtextedit-' + uid).val($('#qtext-' + uid).val());
-  $('#qtextedit-'+ uid).css('display','inline-block');
-  $('#counter-'+ uid).css('display','inline-block');
-  $('#save-'+ uid).css('display','inline-block');
-  $('#cancel-'+ uid).css('display','inline-block');
+function NewIssue() {
+
+    var uid = generateUUID();
+    var quoted_uid =  "'" + uid + "'"; // Wrapped in quotes to make things cleaner.
+
+    // Send question text to sqlite
+
+    // Create a new question
+    $("#issues").append(
+      '<div class="clear"></div>'
+      +'<div id="issue-' + uid + '" class="row"></div>');
+    $("#issue-" + uid).append(
+      '<div id="issue_text-' + uid + '" name="issue_text" class="col-md-9">' + $("#new_issue_text").val() + '</div>'
+      +'<div class="options">'
+      +'<input id="counter-' + uid + '" class="form-control" name="counter" type="text" size="4" value="" readonly>'
+      +'<button id="plus-' + uid + '" class="btn btn-default" onclick="counter(' + quoted_uid + ');">+1</button>'
+      +'<button id="edit-' + uid + '" class="btn btn-default" data-toggle="modal" data-target="#EditIssue" onclick="edit_issue(' + quoted_uid + ')">Edit</button>'
+      +'<input id="del-' + uid + '" class="btn btn-danger" type="button" value="Delete" onclick="DeleteIssue(' + quoted_uid + ');">'
+     +'</div>');
+
+    // Clear question to avoid replication by mistake.
+    $("#new_issue_text").val("");
 }
 
-function saveEdit(uid) {
+// Edit a question
+function edit_issue(quoted_uid) {
 
-  // Should send changes to sqlite
+  // Lock issue in db
+
+  // Let the user edit issue
+  $("#edit_text").val($("#issue_text-" + quoted_uid).text());
+  current_issue_edit_id = quoted_uid;
+}
+
+function SaveEdit(quoted_uid) {
+
+  $("#EditIssue").modal('hide');
+  // Should send changes to sqlite and unclock db
 
   // Save locally for UI
-  $('#qtext-' + uid).val( $('#qtextedit-' + uid).val() );
-  $('#qtextedit-'+ uid).css('display','none');
-  $('#save-'+ uid).css('display','none');
-  $('#cancel-'+ uid).css('display','none');
-  $('#qtext-' + uid).show();      
 }
 
-function cancelEdit(uid) {
-  $('#qtextedit-'+ uid).css('display','none');
-  $('#save-'+ uid).css('display','none');
-  $('#cancel-'+ uid).css('display','none');
-  $('#qtext-' + uid).show();
+function CancelEdit(quoted_uid) {
 
+  // unlock issue in db
 }
 
 // Delete a question
-function deleteq(uid) {
+function DeleteIssue(uid) {
   if (confirmBox()) {
 
     // Send a delete request to sqlite
 
-    // Remove the div from the page
-    $("#del-" + uid).parent().remove();
+    // Remove issue from db and html
+    $("#issue-" + uid).remove();
   }
 }
 
@@ -78,6 +108,12 @@ function deleteq(uid) {
 function counter(uid) {
 
   // Send a +1 to sqlite
+
+  // lock the button to avoid double +1s
+
+  // wait for success callback
+
+  // if callback returns a failure alert DB error
 
   // Increase the counter by 1
   if ($("#counter-" + uid).val() == "")
