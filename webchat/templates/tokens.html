@@ -40,7 +40,7 @@
  {% for token in tokens %}
     <tr>
       <td><input name="selected_list" type="checkbox" value="{{token.token}}"></td>
-      <td>http://{{url}}/chat/{{token.token}}</td> <!-- Should be replaced with https and the correct domain -->
+      <td>https://{{url}}/chat/{{token.token}}</td>
       <td>{{token.expires_at|date:"Y-m-d G:i"}}</td>
       <td>{{token.comment}}</td>
     </tr>
