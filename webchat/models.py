@@ -36,9 +36,10 @@ class Token(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField()
     comment = models.CharField(max_length=128)
+    visits = models.IntegerField(default=0)
 
     def __unicode__(self):
-        return u'ID: %s Owner: %s' % (self.t_id, self.owner)
+        return u'ID: %s Owner: %s visits: %s' % (self.t_id, self.owner, self.visits)
 
     def create_token(self, owner_id, expiration_days, comment):
         q = Token(
@@ -73,3 +74,12 @@ class Token(models.Model):
         '''
         return Token.objects.filter(owner=assistant).order_by('-t_id')\
             .filter(expires_at__gt=timezone.now())
+
+    def increment_visits(self, id):
+        token = Token.objects.filter(t_id=id)
+
+        if not token:
+            return False
+
+        token.update(visits=F('visits')+1)
+        return True

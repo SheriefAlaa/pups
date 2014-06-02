@@ -98,6 +98,7 @@ INSTALLED_APPS = (
     'pups',
     'webchat',
     'stats',
+    'south'
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

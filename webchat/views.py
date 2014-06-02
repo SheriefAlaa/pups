@@ -86,20 +86,25 @@ def chat(request, token):
     and did not expire.
     '''
 
-    t = Token()
-    t_obj = get_object_or_404(Token, token=token)
+    requested_token = get_object_or_404(Token, token=token)
 
     # Make sure token didn't expire
-    if t_obj.expires_at < timezone.now():
+    if requested_token.expires_at < timezone.now():
         return render(request, "token_exp.html")
 
     params = {
         'server': settings.CONFIG['server'],
         'bosh': settings.CONFIG['bosh'],
-        'receiver': t_obj.owner.username + settings.CONFIG['receiver'],
-        'receiver_name': t_obj.owner.username,
-        'token': token
+        'receiver':
+        requested_token.owner.username + settings.CONFIG['receiver'],
+        'receiver_name': requested_token.owner.username,
+        'token': token,
+        'comment': requested_token.comment
     }
+
+    # Count visits for metrics
+    requested_token.increment_visits(requested_token.pk)
+
     return render(request, 'prodromus.html', params)
 
 
