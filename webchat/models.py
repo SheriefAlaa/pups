@@ -27,6 +27,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F
+from django.db.models import Sum
 
 
 class Token(models.Model):
@@ -39,7 +40,8 @@ class Token(models.Model):
     visits = models.IntegerField(default=0)
 
     def __unicode__(self):
-        return u'ID: %s Owner: %s visits: %s' % (self.t_id, self.owner, self.visits)
+        return u'ID: %s Owner: %s visits: %s' % (self.t_id, self.owner,
+                                                 self.visits)
 
     @staticmethod
     def create_token(owner_id, expiration_days, comment):
@@ -80,3 +82,29 @@ class Token(models.Model):
 
         token.update(visits=F('visits')+1)
         return True
+
+    @staticmethod
+    def get_live_tokens(owner, month):
+        return Token.objects.filter(owner=owner)\
+                            .filter(created_at__month=month)\
+                            .filter(expires_at__gt=timezone.now()).count()
+
+    @staticmethod
+    def get_expired_tokens(owner, month):
+        return Token.objects.filter(owner=owner)\
+                            .filter(created_at__month=month)\
+                            .exclude(created_at=F('expires_at'))\
+                            .filter(expires_at__lt=timezone.now()).count()
+
+    @staticmethod
+    def get_revoked_tokens(owner, month):
+        return Token.objects.filter(owner=owner)\
+                            .filter(expires_at__month=month)\
+                            .filter(created_at=F('expires_at')).count()
+
+    @staticmethod
+    def get_token_visits(owner, month):
+        result = Token.objects.filter(owner=owner)\
+                              .filter(expires_at__month=month)\
+                              .aggregate(Sum('visits'))
+        return result['visits__sum'] or 0

@@ -2,19 +2,41 @@
 {% block title %}Pups - Home{% endblock title %}
 
 {% block extra_css %}
-	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap-theme.min.css">
-	<link rel="stylesheet" type="text/css" href="/static/css/footer.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/footer.css">
 {% endblock extra_css %}
 {% block script %}
-	<script type="text/javascript" src="/static/js/jquery.min.js"></script>
-	<script src="/static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
 {% endblock script %}
 
 {% block content %}
 {% include "nav_bar.html" %}
 
-Under Construction.
+
+<div class="page-header">
+    <h3> Pups at a glance: </h3>
+</div>
+
+<div style="width:600px;">
+    <table class="table table-bordered">
+        <tr>
+            <td><b>Live Tokens</b></td>
+            <td><b>Token Visits</b></td>
+            <td><b>Expired Tokens</b></td>
+            <td><b>Revoked Tokens</b></td>
+            <td><b>Frequent Issues</b></td>
+        </tr>
+        <tr>
+            <td>{{data.live_tokens}}</td>
+            <td>{{data.total_visits}}</td>
+            <td>{{data.expired_tokens}}</td>
+            <td>{{data.revoked_tokens}}</td>
+            <td>{{data.frequent_issues}}</td>
+        </tr>
+    </table>
+</div>
 
 {% include "footer.html" %}
 {% endblock content %}

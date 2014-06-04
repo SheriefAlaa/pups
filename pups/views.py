@@ -26,6 +26,7 @@ from django.contrib.auth.views import login
 from django.contrib.auth.decorators import login_required
 from pups.forms import ChangePassForm
 from django.contrib import messages
+from pups.models import get_home_stats
 from pups.feedback import FeedbackMessages as fbm
 
 
@@ -56,4 +57,5 @@ def change_password(request):
 
 @login_required
 def home(request):
-    return render(request, "pups.html")
+    data = get_home_stats(request.user.id)
+    return render(request, "pups.html", {'data': data})
