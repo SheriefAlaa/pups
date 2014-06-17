@@ -42,9 +42,9 @@
  * @license Affero General Public License
  */
 
-_assistantNotAvailable = 0
-_assistantAvailable = 1
-_serverError = 2
+const ASSISTANT_NOT_AVAILABLE = 0
+const ASSISTANT_AVAILABLE = 1
+const SERVER_ERROR = 2
 
 var assisantStatus;
 var status_msg;
@@ -227,7 +227,7 @@ Prodromus.actionhandler = {
 
                 Prodromus.buildAndSendMessage(
                     Prodromus.Util.htmlspecialchars( Prodromus.config.SENDERNAME ) + Prodromus.i18n.t9n( 'msg-hello' )
-                  , 'chat' 
+                    , 'chat'
                 );
 
                 Prodromus.buildAndSendMessage("Token: " + Prodromus.config.TOKEN, 'chat', true);
@@ -463,20 +463,20 @@ Prodromus.PresenceReporter =
                 // Available
                 if ( (presence_type === undefined) && (show === '' || show === 'chat') )
                 {
-                    assisantStatus = _assistantAvailable;
+                    assisantStatus = ASSISTANT_AVAILABLE;
                     return true;
                 }
 
                 // Not Available
                 if (presence_type === 'unavailable' || show === 'xa' || show === 'dnd' || 'away')
                 {
-                    assisantStatus = _assistantNotAvailable;
+                    assisantStatus = ASSISTANT_NOT_AVAILABLE;
                     return true;
                 }
             }
             else
             {
-                assisantStatus = _serverError;
+                assisantStatus = SERVER_ERROR;
             }
         }
         return true;
@@ -493,7 +493,7 @@ Prodromus.PresenceReporter =
 
     giveFeedback: function()
     {
-        if (assisantStatus !== _assistantAvailable)
+        if (assisantStatus !== ASSISTANT_AVAILABLE)
         {
             if (status_msg !== undefined) 
             {
