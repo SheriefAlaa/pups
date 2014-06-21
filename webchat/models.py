@@ -41,7 +41,8 @@ class Token(models.Model):
     def __unicode__(self):
         return u'ID: %s Owner: %s visits: %s' % (self.t_id, self.owner, self.visits)
 
-    def create_token(self, owner_id, expiration_days, comment):
+    @staticmethod
+    def create_token(owner_id, expiration_days, comment):
         q = Token(
             owner=User.objects.get(id=owner_id),
             token=uuid.uuid4().hex,
@@ -52,13 +53,15 @@ class Token(models.Model):
 
         return q.t_id is not None
 
+    @staticmethod
     def get_token(self, token):
         try:
             return Token.objects.get(token=token)
         except ObjectDoesNotExist:
             return []
 
-    def revoke_tokens(self, token_list):
+    @staticmethod
+    def revoke_tokens(token_list):
         '''
         Sets the expiration date equals to the creation date of a token or more
         '''
@@ -68,7 +71,8 @@ class Token(models.Model):
                 .update(expires_at=F('created_at'))
         return True
 
-    def get_assistant_tokens(self, assistant):
+    @staticmethod
+    def get_assistant_tokens(assistant):
         '''
         Returns a list of non-expired/revoked assistant's tokens
         '''

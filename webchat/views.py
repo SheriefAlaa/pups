@@ -32,7 +32,6 @@ from pups import settings
 
 @login_required
 def tokens_page(request):
-    token = Token()
 
     # Create one token
     if 'create_token' in request.POST:
@@ -44,7 +43,7 @@ def tokens_page(request):
 
     params = {
         'name': request.user.username,
-        'tokens': token.get_assistant_tokens(
+        'tokens': Token.get_assistant_tokens(
             User.objects.get(id=request.user.id)),
         'url': settings.CONFIG['url']
     }
@@ -53,9 +52,8 @@ def tokens_page(request):
 
 
 def create_token(request):
-    token = Token()
 
-    if not token.create_token(request.user.id,
+    if not Token.create_token(request.user.id,
                               settings.CONFIG['expiration_days'],
                               request.POST.get('comment', '')):
 
@@ -67,7 +65,6 @@ def create_token(request):
 
 
 def revoke_tokens(request):
-    token = Token()
 
     # If nothing was selected redirect and complain
     if len(request.POST.getlist("selected_list")) == 0:
@@ -75,7 +72,7 @@ def revoke_tokens(request):
         return redirect('/tokens')
 
     # Revoke a token or more
-    token.revoke_tokens(request.POST.getlist("selected_list"))
+    Token.revoke_tokens(request.POST.getlist("selected_list"))
     messages.add_message(request, messages.INFO, fbm.revoke_success)
     return redirect('/tokens')
 
