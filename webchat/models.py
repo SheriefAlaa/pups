@@ -54,13 +54,6 @@ class Token(models.Model):
         return q.t_id is not None
 
     @staticmethod
-    def get_token(self, token):
-        try:
-            return Token.objects.get(token=token)
-        except ObjectDoesNotExist:
-            return []
-
-    @staticmethod
     def revoke_tokens(token_list):
         '''
         Sets the expiration date equals to the creation date of a token or more
