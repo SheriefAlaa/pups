@@ -51,7 +51,7 @@
         {{token.comment|slice:":35"}}
 
         {% if token.comment|length > 35 %}
-          <span data-toggle="modal" data-target="#comment-modal" style="color:blue; font-size:80%;"> more</span>
+          <a data-toggle="modal" data-target="#comment-modal" style="color:blue; font-size:80%;" href=""> more</a>
         {% endif %}
       </td>
     </tr>
