@@ -1,8 +1,7 @@
-{% extends "generic_form.html" %}
+{% extends "base.html" %}
 {% block title %}Pups - Login{% endblock title %}
-
-{% block form-tag %}
-
+{% block content %}
+<div id="container">
 {% if form.errors %}
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
@@ -18,4 +17,7 @@
   </p>
 <input type="submit" value="Login">
 </form>
-{% endblock form-tag %}
+
+<div class="push_footer"></div>
+</div>
+{% endblock content %}

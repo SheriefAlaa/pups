@@ -1,0 +1,24 @@
+* {margin: 0;}
+
+html, body { height: 100%;}
+
+#container { 
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -40px;
+  width: 1000px;
+}
+
+#footer {
+  position: relative;
+  height: 40px;
+  background-color: #f5f5f5;
+  text-align: center;
+}
+
+.clearfix {padding-top: 10%;}
+
+.push_footer {height: 40px;}
+
+.text-muted {text-align: center;}

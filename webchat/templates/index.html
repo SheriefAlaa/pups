@@ -2,10 +2,6 @@
 {% block title %}Webchat - Home{% endblock title %}
 
 {% block extra_css %}
-	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap-theme.min.css">
-	<link rel="stylesheet" type="text/css" href="/static/css/footer.css">
-
 	<style type="text/css">
 		body {
 		    background-image: url('/static/images/webchat-background.png');
@@ -13,15 +9,12 @@
 		    background-position: right top;
 		    text-align: center;
 		}
-		
-		.clear {
-			margin-top: 10%;
-		}
 	</style>
 {% endblock extra_css %}
 
 {% block content %}
-<div class="clear"></div>
+<div id="container">
+<div class="clearfix"></div>
 <div class="panel panel-default">
   <div class="panel-body">
     If you want to chat with the help desk please send an email to help@rt.torproject.org
@@ -57,5 +50,6 @@
     إذا كنت تريد الدردشة مع مكتب المساعدة الرجاء إرسال بريد إلكتروني إلى help-ar@rt.torproject.org
   </div>
 </div>
-{% include "footer.html" %}
+<div class="push_footer"></div>
+</div>
 {% endblock content %}
