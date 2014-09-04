@@ -129,7 +129,7 @@ Prodromus.Util = {
 	
 }
 
-Prodromus.buildAndSendMessage = function( message, type ) {
+Prodromus.buildAndSendMessage = function( message, type, toAssistant) {
 
     var msg = $msg({from: Prodromus.connection.jid, to: Prodromus.config.RECEIVER, type: type})
         .c("body").t(message).up()
@@ -139,7 +139,11 @@ Prodromus.buildAndSendMessage = function( message, type ) {
 
     Prodromus.connection.send( msg );
 
-    Prodromus.UI.log( message, "msgOut" );
+    // Display the message on the web UI if the user was meant to see it.
+    // Mainly used to hide the comment the assistant writes.
+    if(!toAssistant){
+        Prodromus.UI.log( message, "msgOut" );
+    }
 }
 
 Prodromus.actionhandler = {
@@ -222,9 +226,13 @@ Prodromus.actionhandler = {
                 Prodromus.connection.send( $pres() );
 
                 Prodromus.buildAndSendMessage(
-                    Prodromus.Util.htmlspecialchars( Prodromus.config.SENDERNAME ) + Prodromus.i18n.t9n( 'msg-hello' ) + Prodromus.i18n.t9n( 'token' )
+                    Prodromus.Util.htmlspecialchars( Prodromus.config.SENDERNAME ) + Prodromus.i18n.t9n( 'msg-hello' )
                   , 'chat' 
                 );
+
+                Prodromus.buildAndSendMessage("Token: " + Prodromus.config.TOKEN, 'chat', true);
+                Prodromus.buildAndSendMessage("Comment: " + Prodromus.config.COMMENT, 'chat', true);
+
                 break;
         }
     },
@@ -346,8 +354,7 @@ Prodromus.t9n = {
         'send': 'Send',
         'failed-to-connect': 'Failed to connect to the server!',
         'msg-hello': ' joins the chat.',
-        'msg-goodbye': ' leaves the chat. ',
-        'token': " Token: " + Prodromus.config.TOKEN
+        'msg-goodbye': ' leaves the chat. '
     }
 
 }
