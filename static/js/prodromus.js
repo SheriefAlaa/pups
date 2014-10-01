@@ -105,13 +105,7 @@ Prodromus.Util = {
         text = text.replace(
             /((https?\:\/\/|ftp\:\/\/)|(www\.))(\S+)(\w{2,4})(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gi
           , function( url ) {
-                nice = url;
-                if( url.match( "^https?:\/\/" ) ) {
-                    nice = nice.replace( /^https?:\/\//i, "" )
-                } else {
-                    url = 'http://'+url;
-                }			
-                return '<a target="_blank" href="' + url + '">' + nice.replace( /^www./i, "" ) + '</a>';
+                return '<a target="_blank" href="' + url + '">' + url + '</a>';
 		    }
 		);
 		
