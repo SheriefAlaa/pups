@@ -23,6 +23,7 @@
 var Stats = {};
 var current_issue_edit_id;
 var gridUpdateInterval;
+var lock_clearing;
 const MAX_ROW_LENGTH = 86;
 const GRID_UPDATE_TIMER = 10000;
 
@@ -100,7 +101,9 @@ Stats.ActionHandler = {
           // Let the user edit the issue
           $('#EditIssue').modal('show');
           $("#edit_text").val($("#full_issue_text-" + id).val());
+          $("#lock_limit").html("This issue will be locked for <b>" + issue['lock_limit'] + "</b> minute(s). Your page will refresh if you don't complete editing when that time expires");
           current_issue_edit_id = id;
+          lock_clearing = setTimeout(function(){location.reload()}, issue['lock_limit'] * 60000);
 
         }else if (issue['lock_status'] == 'does_not_exist') {
 
@@ -114,7 +117,7 @@ Stats.ActionHandler = {
             current_issue_edit_id = id;
           }else{
             $('#Alert').modal('show');
-            $(".alert-body").html("This issue is currently being edited by " + issue['locked_by']);
+            $(".alert-body").html("This issue is currently being edited by <b>" + issue['locked_by'] + "</b> but his lock will expire in <b>" + issue['expires_in'] + "</b> minutes");
           }
         }
       },
@@ -194,6 +197,8 @@ Stats.ActionHandler = {
 
   // unlocks a row in db
   unlockIssue: function(id) {
+    clearTimeout(lock_clearing);
+
     $.ajax({
       type: "POST",
       url: "/unlock_issue",

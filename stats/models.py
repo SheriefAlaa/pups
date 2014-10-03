@@ -20,10 +20,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Pups.  If not, see <http://www.gnu.org/licenses/>.
 
+import datetime
 from django.db import models
 from django.db.models import F
 from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
+from django.utils import timezone
+from pups import settings
 
 
 class Issue(models.Model):
@@ -34,6 +37,7 @@ class Issue(models.Model):
     last_edited_at = models.DateTimeField(auto_now_add=True)
     is_locked = models.BooleanField(default=False)
     locked_by = models.CharField(max_length=64)
+    locked_since = models.DateTimeField(null=True)
     last_edited_by = models.CharField(max_length=64)
 
     def __unicode__(self):
@@ -102,10 +106,18 @@ class Issue(models.Model):
 
         # Checking if issue is locked for editing by another user
         if issue_obj.is_locked:
-            return {'locked_by': issue_obj.locked_by}
+            locked_until = issue_obj.locked_since + datetime.timedelta(
+                minutes=settings.CONFIG['edit_lock_expiration'])
 
-        # If issue isn't used by anyone lock it
+            if timezone.now() < locked_until:
+                return {'locked_by': issue_obj.locked_by,
+                        'expires_in': (locked_until - timezone.now()).seconds / 60}
+            else:
+                Issue.unlock(id)
+
+        # If issue isn't used by anyone, lock it
         issue_db_row.update(is_locked=True)
+        issue_db_row.update(locked_since=timezone.now())
         issue_db_row.update(locked_by=user)
         return True
 

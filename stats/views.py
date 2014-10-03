@@ -25,6 +25,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from stats.models import Issue
+from pups import settings
 
 
 
@@ -32,10 +33,12 @@ from stats.models import Issue
 def stats_page(request):
     return render(request, 'stats.html')
 
+
 @login_required
 def stats_data_ajax(request):
     return HttpResponse(json.dumps(Issue.get_issues_json()),
                         content_type="application/json")
+
 
 @login_required
 def create_issue(request):
@@ -70,10 +73,12 @@ def edit_issue_ajax(request):
 
     if lock_status is True:
         response_data['lock_status'] = 'lock_success'
+        response_data['lock_limit'] = settings.CONFIG['edit_lock_expiration']
     elif lock_status is False:
         response_data['lock_status'] = 'does_not_exist'
     elif type(lock_status) is dict:
         response_data['locked_by'] = lock_status['locked_by']
+        response_data['expires_in'] = lock_status['expires_in']
 
     return HttpResponse(json.dumps(response_data),
                         content_type="application/json")

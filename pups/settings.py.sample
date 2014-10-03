@@ -118,5 +118,7 @@ CONFIG = {
     'server': '',  # xmpp server
     'bosh': '',  # http://example.com/http-bind
     'receiver': '',  # @example.lit
-    'expiration_days': 3  # Token expiration days
+    'expiration_days': ,  # Token expiration days
+    'stats_reports_path': '', # Where stats reports are backed up (needs a trailing slash)
+    'edit_lock_expiration': # expiration in minutes
 }
