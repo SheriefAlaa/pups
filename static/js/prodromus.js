@@ -175,10 +175,6 @@ Prodromus.actionhandler = {
     },
 
     sendmessage: function() {
-        $('#prodromus-message').val( 
-            $('#prodromus-message').val().replace(/\n/g,"").replace(/\r/g,"")
-        );
-        
         if( $('#prodromus-message').val() != '' ) {
             Prodromus.buildAndSendMessage( $('#prodromus-message').val(), 'chat' );
 	        $('#prodromus-message').val('');

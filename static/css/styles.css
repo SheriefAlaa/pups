@@ -122,6 +122,7 @@ div#prodromus div#prodromus-log div.message span.msgText {
     font-weight: bold;
     background: #E0E1E1 url(../images/prodromus_bubble_content.png) left top no-repeat;
     padding: 0px 12px;
+    word-wrap: break-word;
 }
 
 div#prodromus div#prodromus-log div.message span.msgPerson {
