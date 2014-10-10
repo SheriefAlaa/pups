@@ -1,10 +1,11 @@
+
 body {
     background-image: url('/static/images/webchat-background.png');
     background-repeat:no-repeat;
     background-position: right top;
 }
 div#prodromus {
-    width: 420px;
+    width: 840px;
     border: 1px solid #C9C9C9;
     margin: 10px auto 20px auto;
     padding: 10px;
@@ -64,8 +65,8 @@ div#prodromus div#prodromus-messaging {
 }
 
 div#prodromus div#prodromus-log {
-    height: 300px;
-    width: 388px;
+    height: 600px;
+    width: 808px;
     border: 1px solid #999999;
     background-color: #FFFFFF;
     overflow: auto;
@@ -80,9 +81,10 @@ div#prodromus div#prodromus-log {
 }
 
 div#prodromus div#prodromus-log div.message {
-    width: 350px;
+    width: 650px;
     background: transparent url(../images/prodromus_bubble_top.png) left top no-repeat;
     padding-top: 9px;
+    padding-bottom: 5px;
     margin: 0 auto;
 }
 
@@ -120,7 +122,7 @@ div#prodromus div#prodromus-log div.messageSystem {
 div#prodromus div#prodromus-log div.message span.msgText {
     display: block;
     font-weight: bold;
-    background: #E0E1E1 url(../images/prodromus_bubble_content.png) left top no-repeat;
+    background: #c8c5c5 url(../images/prodromus_bubble_content.png) left top no-repeat;
     padding: 0px 12px;
     word-wrap: break-word;
 }
@@ -129,7 +131,7 @@ div#prodromus div#prodromus-log div.message span.msgPerson {
     display: block;
     background: transparent url(../images/prodromus_bubble_bottom.png) left top no-repeat;
     height: 25px;
-    padding: 12px 0 0 50px;
+    padding: 15px 0 0 50px;
     font-size: 0.8em;
 }
 
@@ -138,7 +140,7 @@ div#prodromus div#prodromus-log div.message span.msgPerson span.msgTime {
 }
 
 div#prodromus div#prodromus-messaging textarea#prodromus-message {
-    width: 388px;
+    width: 735px;
     border: 1px solid #999999;
     margin: 5px 5px 0;
     -moz-border-radius: 5px;
@@ -176,4 +178,32 @@ div#prodromus div#prodromus-messaging input#prodromus-sendmessage {
   margin: 0 auto;
   left:0;
   right:100px;
+}
+
+
+.bubble {
+  position: relative;
+  width: 350px;
+  height: 48px;
+  padding: 0px;
+  background: #d9d9d9;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-box-shadow: 2px 2px 10px 0px #616161;
+  -moz-box-shadow: 2px 2px 10px 0px #616161;
+  box-shadow: 2px 2px 10px 0px #616161;
+}
+
+.bubble:after {
+  content: "";
+  position: absolute;
+  bottom: -15px;
+  left: 37px;
+  border-style: solid;
+  border-width: 15px 15px 0;
+  border-color: #d9d9d9 transparent;
+  display: block;
+  width: 0;
+  z-index: 1;
 }
