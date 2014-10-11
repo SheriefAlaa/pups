@@ -9,15 +9,8 @@
   <script type="text/javascript" src="/static/js/jquery.min.js"></script>
   <script src="/static/js/bootstrap.min.js"></script>
   <script type="text/javascript">
-  $(document).ready (function (){
-    $(".comment").html(function(){
-      $(this).html($(this).text().substring(0,35) 
-        + ' <span data-toggle="modal" data-target="#comment-modal" style="color:blue; font-size:80%;"> Read more..</span>');
-    });
-  });
-
     function full_comment(id){
-      $(".comment-modal-body").html($("#full-comment-" + id).val());
+      $(".comment-modal-body").text($("#full-comment-" + id).val());
     }
   </script>
 {% endblock script %}
@@ -54,7 +47,13 @@
       <td><input name="selected_list" type="checkbox" value="{{token.token}}"></td>
       <td>https://{{url}}/chat/{{token.token}}</td>
       <td>{{token.expires_at|date:"Y-m-d G:i"}}</td>
-      <td class="comment" onclick="full_comment({{token.t_id}});">{{token.comment}}</td>
+      <td class="comment" onclick="full_comment({{token.t_id}});">
+        {{token.comment|slice:":35"}}
+
+        {% if token.comment|length > 35 %}
+          <a data-toggle="modal" data-target="#comment-modal" style="color:blue; font-size:80%;" href=""> more</a>
+        {% endif %}
+      </td>
     </tr>
     <input id="full-comment-{{token.t_id}}" type="hidden" value="{{token.comment}}">
  {% endfor %}

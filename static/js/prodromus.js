@@ -42,9 +42,9 @@
  * @license Affero General Public License
  */
 
-_assistantNotAvailable = 0
-_assistantAvailable = 1
-_serverError = 2
+const ASSISTANT_NOT_AVAILABLE = 0
+const ASSISTANT_AVAILABLE = 1
+const SERVER_ERROR = 2
 
 var assisantStatus;
 var status_msg;
@@ -105,13 +105,7 @@ Prodromus.Util = {
         text = text.replace(
             /((https?\:\/\/|ftp\:\/\/)|(www\.))(\S+)(\w{2,4})(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gi
           , function( url ) {
-                nice = url;
-                if( url.match( "^https?:\/\/" ) ) {
-                    nice = nice.replace( /^https?:\/\//i, "" )
-                } else {
-                    url = 'http://'+url;
-                }			
-                return '<a target="_blank" href="' + url + '">' + nice.replace( /^www./i, "" ) + '</a>';
+                return '<a target="_blank" href="' + url + '">' + url + '</a>';
 		    }
 		);
 		
@@ -129,7 +123,7 @@ Prodromus.Util = {
 	
 }
 
-Prodromus.buildAndSendMessage = function( message, type ) {
+Prodromus.buildAndSendMessage = function( message, type, toAssistant) {
 
     var msg = $msg({from: Prodromus.connection.jid, to: Prodromus.config.RECEIVER, type: type})
         .c("body").t(message).up()
@@ -139,7 +133,11 @@ Prodromus.buildAndSendMessage = function( message, type ) {
 
     Prodromus.connection.send( msg );
 
-    Prodromus.UI.log( message, "msgOut" );
+    // Display the message on the web UI if the user was meant to see it.
+    // Mainly used to hide the comment the assistant writes.
+    if(!toAssistant){
+        Prodromus.UI.log( message, "msgOut" );
+    }
 }
 
 Prodromus.actionhandler = {
@@ -177,10 +175,6 @@ Prodromus.actionhandler = {
     },
 
     sendmessage: function() {
-        $('#prodromus-message').val( 
-            $('#prodromus-message').val().replace(/\n/g,"").replace(/\r/g,"")
-        );
-        
         if( $('#prodromus-message').val() != '' ) {
             Prodromus.buildAndSendMessage( $('#prodromus-message').val(), 'chat' );
 	        $('#prodromus-message').val('');
@@ -222,9 +216,13 @@ Prodromus.actionhandler = {
                 Prodromus.connection.send( $pres() );
 
                 Prodromus.buildAndSendMessage(
-                    Prodromus.Util.htmlspecialchars( Prodromus.config.SENDERNAME ) + Prodromus.i18n.t9n( 'msg-hello' ) + Prodromus.i18n.t9n( 'token' )
-                  , 'chat' 
+                    Prodromus.Util.htmlspecialchars( Prodromus.config.SENDERNAME ) + Prodromus.i18n.t9n( 'msg-hello' )
+                    , 'chat'
                 );
+
+                Prodromus.buildAndSendMessage("Token: " + Prodromus.config.TOKEN, 'chat', true);
+                Prodromus.buildAndSendMessage("Comment: " + Prodromus.config.COMMENT, 'chat', true);
+
                 break;
         }
     },
@@ -346,8 +344,7 @@ Prodromus.t9n = {
         'send': 'Send',
         'failed-to-connect': 'Failed to connect to the server!',
         'msg-hello': ' joins the chat.',
-        'msg-goodbye': ' leaves the chat. ',
-        'token': " Token: " + Prodromus.config.TOKEN
+        'msg-goodbye': ' leaves the chat. '
     }
 
 }
@@ -456,20 +453,20 @@ Prodromus.PresenceReporter =
                 // Available
                 if ( (presence_type === undefined) && (show === '' || show === 'chat') )
                 {
-                    assisantStatus = _assistantAvailable;
+                    assisantStatus = ASSISTANT_AVAILABLE;
                     return true;
                 }
 
                 // Not Available
                 if (presence_type === 'unavailable' || show === 'xa' || show === 'dnd' || 'away')
                 {
-                    assisantStatus = _assistantNotAvailable;
+                    assisantStatus = ASSISTANT_NOT_AVAILABLE;
                     return true;
                 }
             }
             else
             {
-                assisantStatus = _serverError;
+                assisantStatus = SERVER_ERROR;
             }
         }
         return true;
@@ -486,7 +483,7 @@ Prodromus.PresenceReporter =
 
     giveFeedback: function()
     {
-        if (assisantStatus !== _assistantAvailable)
+        if (assisantStatus !== ASSISTANT_AVAILABLE)
         {
             if (status_msg !== undefined) 
             {
